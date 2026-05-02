@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.2
+    container_name: dnd_database
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: dnd_vtt_db
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: dnd_user
+      MYSQL_PASSWORD: dnd_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - dnd_db_data:/var/lib/mysql
+
+volumes:
+  dnd_db_data:

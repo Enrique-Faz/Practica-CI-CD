@@ -1,0 +1,34 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Character;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends Factory<Character>
+ */
+class CharacterFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'user_id' => User::factory(),
+            'name' => fake()->name() . " el " . fake()->jobTitle(),
+            'hp' => fake()->numberBetween(10, 50),
+            'speed' => fake()->randomElement([25, 30, 35]),
+            'strength' => fake()->numberBetween(8, 18),
+            'dexterity' => fake()->numberBetween(8, 18),
+            'constitution' => fake()->numberBetween(8, 18),
+            'intelligence' => fake()->numberBetween(8, 18),
+            'wisdom' => fake()->numberBetween(8, 18),
+            'charisma' => fake()->numberBetween(8, 18),
+        ];
+    }
+}
