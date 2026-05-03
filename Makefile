@@ -39,12 +39,13 @@ clean: ## Detiene contenedores y limpia archivos temporales de Laravel
 	-$(DC) exec app php artisan optimize:clear[cite: 2]
 
 fclean: ## BORRADO TOTAL: Elimina contenedores, imágenes, volúmenes y el archivo .env
-	@echo "⚠️  ATENCIÓN: Se van a borrar todos los datos, imágenes y el archivo .env"[cite: 2]
-	$(DC) down --rmi all --volumes --remove-orphans[cite: 2]
+	@echo "⚠️  ATENCIÓN: Se van a borrar todos los datos, imágenes y el archivo .env"
+	$(DC) down --rmi all
+	@docker volume prune -f
 	@if [ -f $(BACKEND_DIR)/.env ]; then \
 		rm $(BACKEND_DIR)/.env; \
 		echo "Archivo .env eliminado."; \
-	fi[cite: 2]
-	@echo "✅ Sistema borrado por completo."[cite: 2]
+	fi
+	@echo "✅ Sistema borrado por completo."
 
 reset: fclean install ## Borra todo y vuelve a instalar desde cero
