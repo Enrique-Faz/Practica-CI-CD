@@ -21,24 +21,24 @@ install: ## Instalación completa para profesores (Back + preparación)
 	@echo "El sistema se está configurando. Revisa los logs con 'make logs'."
 
 up: ## Levanta todos los servicios
-	$(DC) up -d[cite: 2]
+	$(DC) up -d
 
 down: ## Apaga todos los servicios
-	$(DC) down[cite: 2]
+	$(DC) down
 
 logs: ## Muestra logs del backend
-	$(DC) logs -f app[cite: 2]
+	$(DC) logs -f app
 
 shell: ## Entra en la terminal de Laravel
-	$(DC) exec app bash[cite: 2]
+	$(DC) exec app bash
 
 migrate: ## Ejecuta migraciones manualmente
-	$(DC) exec app php artisan migrate[cite: 2]
+	$(DC) exec app php artisan migrate
 
 clean: ## Detiene contenedores y limpia archivos temporales de Laravel
-	$(DC) down[cite: 2]
-	@echo "Limpiando cachés de Laravel..."[cite: 2]
-	-$(DC) exec app php artisan optimize:clear[cite: 2]
+	$(DC) down
+	@echo "Limpiando cachés de Laravel..."
+	-$(DC) exec app php artisan optimize:clear
 
 fclean: ## BORRADO TOTAL: Elimina contenedores, imágenes, volúmenes y el archivo .env
 	@echo "⚠️  ATENCIÓN: Se van a borrar todos los datos, imágenes y el archivo .env"
