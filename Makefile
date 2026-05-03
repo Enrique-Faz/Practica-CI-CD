@@ -32,3 +32,20 @@ shell: ## Entra en la terminal de Laravel
 
 migrate: ## Ejecuta migraciones manualmente
 	$(DC) exec app php artisan migrate
+
+clean: ## Detiene contenedores y limpia archivos temporales de Laravel
+	$(DC) down
+	@echo "Limpiando cachés de Laravel..."
+	-$(DC) exec app php artisan optimize:clear
+
+fclean: ## BORRADO TOTAL: Elimina contenedores, imágenes, volúmenes y el archivo .env
+	@echo "⚠️  ATENCIÓN: Se van a borrar todos los datos, imágenes y el archivo .env"
+	$(DC) down --rmi all --volumes --remove-orphans
+	@if [ -f $(BACKEND_DIR)/.env ]; then \
+		rm $(BACKEND_DIR)/.env; \
+		echo "Archivo .env eliminado."; \
+	fi
+	@echo "✅ Sistema borrado por completo."
+
+reset: ## Borra todo y vuelve a instalar desde cero
+	fclean install
