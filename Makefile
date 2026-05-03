@@ -7,10 +7,16 @@ help: ## Muestra la ayuda
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
 
 install: ## Instalación completa para profesores (Back + preparación)
-	@echo "Iniciando instalación del backend..."
-	$(DC) up -d --build
-	@echo "Instalación en curso. Los contenedores se están configurando solos."
-	@echo "Usa 'make logs' para ver el progreso del script entrypoint."
+	@echo "Preparando archivos de configuración..."
+    	@if [ ! -f $(BACKEND_DIR)/.env ]; then \
+    		cp $(BACKEND_DIR)/.env.example $(BACKEND_DIR)/.env; \
+    		echo "Archivo .env creado."; \
+    	fi
+    	@echo "Iniciando contenedores..."
+    	$(DC) up -d --build
+    	@echo "Generando clave de aplicación..."
+    	$(DC) exec app php artisan key:generate  # <-- Esto asegura la key tras el primer arranque
+    	@echo "El sistema se está configurando. Revisa los logs con 'make logs'."
 
 up: ## Levanta todos los servicios
 	$(DC) up -d
