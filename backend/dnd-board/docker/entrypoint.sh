@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ ! -f ".env" ]; then
+    echo "Creando archivo .env a partir de .env.example..."
+    cp .env.example .env
+    php artisan key:generate
+fi
+
 mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache/data
 
 if [ ! -d "vendor" ]; then
