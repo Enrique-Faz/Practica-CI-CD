@@ -12,11 +12,13 @@ install: ## Instalación completa para profesores (Back + preparación)
 		cp $(BACKEND_DIR)/.env.example $(BACKEND_DIR)/.env; \
 		echo "Archivo .env creado."; \
 	fi
+	@echo "Construyendo imágenes..."
+	$(DC) build
 	@echo "Iniciando contenedores..."
-	$(DC) up -d --build[cite: 2]
-	@echo "Generando clave de aplicación..."[cite: 2]
-	$(DC) exec app php artisan key:generate[cite: 2]
-	@echo "El sistema se está configurando. Revisa los logs con 'make logs'."[cite: 2]
+	$(DC) up -d
+	@echo "Generando clave de aplicación..."
+	$(DC) exec app php artisan key:generate
+	@echo "El sistema se está configurando. Revisa los logs con 'make logs'."
 
 up: ## Levanta todos los servicios
 	$(DC) up -d[cite: 2]
