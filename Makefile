@@ -35,10 +35,14 @@ shell: ## Entra en la terminal de Laravel
 migrate: ## Ejecuta migraciones manualmente
 	$(DC) exec app php artisan migrate
 
-clean: ## Detiene contenedores y limpia archivos temporales de Laravel
-	$(DC) down
+clean: ## Limpia cache de Laravel y apaga contenedores
 	@echo "Limpiando cachés de Laravel..."
 	-$(DC) exec app php artisan optimize:clear
+	$(DC) down
+
+cache: ## Limpia la caché sin apagar los contenedores
+	@echo "Limpiando cachés de Laravel..."
+	$(DC) exec app php artisan optimize:clear
 
 fclean: ## BORRADO TOTAL: Elimina contenedores, imágenes, volúmenes y el archivo .env
 	@echo "⚠️  ATENCIÓN: Borrando todo..."
