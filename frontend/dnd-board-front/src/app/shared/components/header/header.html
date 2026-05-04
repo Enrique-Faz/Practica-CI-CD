@@ -1,0 +1,91 @@
+<nav
+  class="sticky top-0 z-50 bg-stone-900/95 backdrop-blur-md border-b border-amber-900/50 shadow-lg shadow-black/30"
+>
+  <div class="max-w-full mx-auto px-8">
+    <div class="grid grid-cols-3 items-center h-20">
+      <!-- Logo -->
+      <a routerLink="/" class="flex items-center gap-3 cursor-pointer group justify-self-start">
+        <img
+          src="logo.png"
+          alt="Beers & Dragons"
+          class="h-20 w-auto object-contain transition-transform group-hover:scale-105"
+        />
+      </a>
+
+      <!-- Nav central -->
+      <div class="hidden md:flex items-center justify-center gap-10">
+        @if (user()) {
+          <a
+            routerLink="/board/list"
+            routerLinkActive
+            #rlaBoards="routerLinkActive"
+            class="group flex flex-col items-center cursor-pointer"
+          >
+            <span
+              class="text-sm font-bold uppercase tracking-widest transition-colors"
+              [class.text-amber-400]="rlaBoards.isActive"
+              [class.text-stone-400]="!rlaBoards.isActive"
+            >
+              Tableros
+            </span>
+            <div
+              class="h-0.5 bg-amber-400 transition-all duration-300 mt-1"
+              [class.w-full]="rlaBoards.isActive"
+              [class.w-0]="!rlaBoards.isActive"
+            ></div>
+          </a>
+
+          @if (isAdmin()) {
+            <a
+              routerLink="/admin"
+              routerLinkActive
+              #rlaAdmin="routerLinkActive"
+              class="group flex flex-col items-center cursor-pointer"
+            >
+              <span
+                class="text-sm font-bold uppercase tracking-widest transition-colors"
+                [class.text-red-400]="rlaAdmin.isActive"
+                [class.text-stone-400]="!rlaAdmin.isActive"
+              >
+                Admin
+              </span>
+              <div
+                class="h-0.5 bg-red-500 transition-all duration-300 mt-1"
+                [class.w-full]="rlaAdmin.isActive"
+                [class.w-0]="!rlaAdmin.isActive"
+              ></div>
+            </a>
+          }
+        }
+      </div>
+
+      <!-- Acciones de usuario -->
+      <div class="flex items-center gap-4 justify-self-end">
+        @if (user()) {
+          <span class="hidden lg:block text-sm text-stone-400 font-medium">
+            {{ user()!.user.firstName }}
+          </span>
+          <button
+            (click)="logout()"
+            class="px-4 py-2 text-xs font-bold uppercase tracking-widest border border-stone-600 text-stone-400 rounded hover:border-red-500 hover:text-red-400 transition-colors"
+          >
+            Salir
+          </button>
+        } @else {
+          <a
+            routerLink="/auth/login"
+            class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-amber-400 transition-colors"
+          >
+            Entrar
+          </a>
+          <a
+            routerLink="/auth/register"
+            class="px-4 py-2 text-xs font-bold uppercase tracking-widest bg-amber-600 hover:bg-amber-500 text-stone-900 rounded transition-colors"
+          >
+            Registrarse
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+</nav>
