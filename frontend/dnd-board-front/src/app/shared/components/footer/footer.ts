@@ -28,7 +28,9 @@ import { Component } from '@angular/core';
           </p>
           <p class="text-xs font-bold text-stone-500">
             © 2026 Beers &amp; Dragons —
-            <span class="text-amber-600 uppercase tracking-wider">Proyecto Intermodular DAW</span>
+            <span class="text-amber-600 uppercase tracking-wider"
+              >Enrique Faz Dionisio — Proyecto Intermodular DAW</span
+            >
           </p>
         </div>
       </div>

@@ -48,7 +48,10 @@ class AuthController extends Controller
             ? Carbon::now()->addMinutes($expirationMinutes)->toIso8601String()
             : null;
 
-        return (new AuthResource($token))->additional(['expiresAt' => $expiresAt]);
+        return (new AuthResource($token))
+            ->additional(['expiresAt' => $expiresAt])
+            ->response()
+            ->setStatusCode(201);
     }
 
     /* -------------------------------------------------------------------------- */
@@ -65,9 +68,9 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['Las credenciales son incorrectas.'],
-            ]);
+            return response()->json([
+                'message' => 'Las credenciales son incorrectas.',
+            ], 401);
         }
 
         if ($user->google2fa_secret) {

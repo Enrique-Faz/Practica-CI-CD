@@ -39,7 +39,7 @@ class AdminController extends Controller
 
         $user->delete();
 
-        return response()->json(['message' => 'Usuario eliminado con éxito']);
+        return response()->noContent();
     }
 
     public function indexBoards(): JsonResponse
@@ -53,6 +53,6 @@ class AdminController extends Controller
     {
         $board->delete();
 
-        return response()->json(['message' => 'Partida eliminada por el administrador']);
+        return response()->noContent();
     }
 }

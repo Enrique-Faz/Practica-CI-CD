@@ -27,7 +27,9 @@ class CharacterController extends Controller
     public function store(StoreCharacterRequest $request)
     {
         $character = Auth::user()->characters()->create($request->validated());
-        return new CharacterResource($character);
+        return (new CharacterResource($character))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -56,7 +58,7 @@ class CharacterController extends Controller
         $this->authorizeOwner($character);
         $character->delete();
 
-        return response()->json(['message' => 'Personaje eliminado con éxito']);
+        return response()->noContent();
     }
 
     private function authorizeOwner(Character $character)

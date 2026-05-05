@@ -37,7 +37,9 @@ class BoardController extends Controller
         $data = $request->validated();
         $data['dm_id'] = Auth::id();
         $board = Board::create($data);
-        return new BoardResource($board->load('dm'));
+        return (new BoardResource($board->load('dm')))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -67,7 +69,7 @@ class BoardController extends Controller
             abort(403, 'Solo el Dungeon Master puede borrar la partida.');
         }
         $board->delete();
-        return response()->json(['message' => 'Partida eliminada con éxito']);
+        return response()->noContent();
     }
 
     /* -------------------------------------------------------------------------- */

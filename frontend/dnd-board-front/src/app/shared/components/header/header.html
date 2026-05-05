@@ -2,7 +2,7 @@
   class="sticky top-0 z-50 bg-stone-900/95 backdrop-blur-md border-b border-amber-900/50 shadow-lg shadow-black/30"
 >
   <div class="max-w-full mx-auto px-8">
-    <div class="grid grid-cols-3 items-center h-20">
+    <div class="grid grid-cols-3 items-center h-24">
       <!-- Logo -->
       <a routerLink="/" class="flex items-center gap-3 cursor-pointer group justify-self-start">
         <img
@@ -13,8 +13,8 @@
       </a>
 
       <!-- Nav central -->
-      <div class="hidden md:flex items-center justify-center gap-10">
-        @if (user()) {
+      <div class="hidden md:flex items-center justify-center gap-12">
+        @if (currentUser()) {
           <a
             routerLink="/board/list"
             routerLinkActive
@@ -22,7 +22,7 @@
             class="group flex flex-col items-center cursor-pointer"
           >
             <span
-              class="text-sm font-bold uppercase tracking-widest transition-colors"
+              class="text-sm font-bold uppercase tracking-[0.2em] transition-colors"
               [class.text-amber-400]="rlaBoards.isActive"
               [class.text-stone-400]="!rlaBoards.isActive"
             >
@@ -37,22 +37,42 @@
 
           @if (isAdmin()) {
             <a
-              routerLink="/admin"
+              routerLink="/admin/stats"
               routerLinkActive
-              #rlaAdmin="routerLinkActive"
+              #rlaStats="routerLinkActive"
               class="group flex flex-col items-center cursor-pointer"
             >
               <span
-                class="text-sm font-bold uppercase tracking-widest transition-colors"
-                [class.text-red-400]="rlaAdmin.isActive"
-                [class.text-stone-400]="!rlaAdmin.isActive"
+                class="text-sm font-bold uppercase tracking-[0.2em] transition-colors"
+                [class.text-red-400]="rlaStats.isActive"
+                [class.text-stone-400]="!rlaStats.isActive"
               >
-                Admin
+                Estadísticas
               </span>
               <div
                 class="h-0.5 bg-red-500 transition-all duration-300 mt-1"
-                [class.w-full]="rlaAdmin.isActive"
-                [class.w-0]="!rlaAdmin.isActive"
+                [class.w-full]="rlaStats.isActive"
+                [class.w-0]="!rlaStats.isActive"
+              ></div>
+            </a>
+
+            <a
+              routerLink="/admin/users"
+              routerLinkActive
+              #rlaUsers="routerLinkActive"
+              class="group flex flex-col items-center cursor-pointer"
+            >
+              <span
+                class="text-sm font-bold uppercase tracking-[0.2em] transition-colors"
+                [class.text-red-400]="rlaUsers.isActive"
+                [class.text-stone-400]="!rlaUsers.isActive"
+              >
+                Usuarios
+              </span>
+              <div
+                class="h-0.5 bg-red-500 transition-all duration-300 mt-1"
+                [class.w-full]="rlaUsers.isActive"
+                [class.w-0]="!rlaUsers.isActive"
               ></div>
             </a>
           }
@@ -60,30 +80,47 @@
       </div>
 
       <!-- Acciones de usuario -->
-      <div class="flex items-center gap-4 justify-self-end">
-        @if (user()) {
-          <span class="hidden lg:block text-sm text-stone-400 font-medium">
-            {{ user()!.user.firstName }}
-          </span>
-          <button
-            (click)="logout()"
-            class="px-4 py-2 text-xs font-bold uppercase tracking-widest border border-stone-600 text-stone-400 rounded hover:border-red-500 hover:text-red-400 transition-colors"
-          >
-            Salir
-          </button>
-        } @else {
+      <div class="flex items-center gap-6 justify-self-end">
+        @if (!currentUser()) {
           <a
             routerLink="/auth/login"
-            class="px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-400 hover:text-amber-400 transition-colors"
+            class="px-5 py-2 text-sm font-bold text-stone-400 hover:text-amber-400 transition-colors tracking-wide"
           >
             Entrar
           </a>
           <a
             routerLink="/auth/register"
-            class="px-4 py-2 text-xs font-bold uppercase tracking-widest bg-amber-600 hover:bg-amber-500 text-stone-900 rounded transition-colors"
+            class="px-6 py-2.5 bg-amber-600 hover:bg-amber-500 text-stone-900 text-sm font-bold rounded-xl shadow-lg shadow-amber-900/30 transition-all hover:-translate-y-0.5 tracking-wide"
           >
             Registrarse
           </a>
+        } @else {
+          <div class="flex items-center gap-4 group">
+            <div class="text-right hidden sm:block">
+              <p class="text-sm font-bold text-stone-200 leading-none">
+                {{ currentUser()!.user.firstName }}
+              </p>
+              <button
+                (click)="logout()"
+                class="text-[10px] uppercase tracking-widest text-stone-500 hover:text-red-400 transition-colors cursor-pointer"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+            <div class="relative">
+              <div
+                class="h-11 w-11 rounded-xl bg-amber-700 border-2 border-transparent group-hover:border-amber-400 transition-all shadow-md flex items-center justify-center"
+              >
+                <span class="text-sm font-black text-amber-100 uppercase">
+                  {{ currentUser()!.user.firstName.charAt(0)
+                  }}{{ currentUser()!.user.lastName.charAt(0) }}
+                </span>
+              </div>
+              <div
+                class="absolute -bottom-1 -right-1 h-3.5 w-3.5 bg-emerald-500 border-2 border-stone-900 rounded-full"
+              ></div>
+            </div>
+          </div>
         }
       </div>
     </div>

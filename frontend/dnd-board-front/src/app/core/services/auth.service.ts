@@ -1,5 +1,5 @@
 import { HttpClient, HttpResourceRef, httpResource } from '@angular/common/http';
-import { Injectable, WritableSignal, effect, inject, signal } from '@angular/core';
+import { Injectable, WritableSignal, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
@@ -19,11 +19,14 @@ const STORAGE_KEY = 'auth_session';
 export class AuthService {
   readonly #router = inject(Router);
   readonly #http = inject(HttpClient);
-
-  currentUser = signal<LoggedUser | undefined>(this.#getStoredSession());
+  #currentUserSignal = signal<LoggedUser | undefined>(this.#getStoredSession());
+  #tempUserId = signal<number | null>(null);
+  currentUser = computed(() => this.#currentUserSignal());
   isSyncing = signal<boolean>(false);
   show2faInput = signal<boolean>(false);
-  #tempUserId = signal<number | null>(null);
+
+  isLoggedIn = computed(() => Boolean(this.currentUser()));
+  isAdmin = computed(() => this.currentUser()?.user.role === 'admin');
 
   login(loginSignal: WritableSignal<LoginRequest>): HttpResourceRef<AuthResponse | undefined> {
     const resource = httpResource<AuthResponse | undefined>(() => {
@@ -111,12 +114,12 @@ export class AuthService {
 
   #updateSession(session: LoggedUser): void {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-    this.currentUser.set(session);
+    this.#currentUserSignal.set(session);
   }
 
   #clearSession(): void {
     localStorage.removeItem(STORAGE_KEY);
-    this.currentUser.set(undefined);
+    this.#currentUserSignal.set(undefined);
     this.#router.navigate(['/auth/login']);
   }
 

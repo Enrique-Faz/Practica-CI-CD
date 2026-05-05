@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
@@ -11,8 +11,9 @@ import { AuthService } from '../../../core/services/auth.service';
 export class Header {
   readonly #authService = inject(AuthService);
 
-  user = computed(() => this.#authService.currentUser());
-  isAdmin = computed(() => this.user()?.user.role === 'admin');
+  currentUser = this.#authService.currentUser;
+  isAdmin = this.#authService.isAdmin;
+  isLoggedIn = this.#authService.isLoggedIn;
 
   logout(): void {
     this.#authService.logout();
