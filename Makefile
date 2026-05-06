@@ -33,7 +33,7 @@ shell: ## Entra en la terminal de Laravel
 	$(DC) exec app bash
 
 migrate: ## Ejecuta migraciones manualmente
-	$(DC) exec app php artisan migrate
+	$(DC) exec app php artisan migrate --seed
 
 clean: ## Limpia cache de Laravel y apaga contenedores
 	@echo "Limpiando cachés de Laravel..."

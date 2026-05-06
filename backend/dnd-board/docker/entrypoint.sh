@@ -24,7 +24,7 @@ while ! nc -z db 3306; do
 done
 
 echo "Ejecutando migraciones..."
-php artisan migrate --force
+php artisan migrate --force --seed
 
 echo "Iniciando PHP-FPM..."
 exec php-fpm
