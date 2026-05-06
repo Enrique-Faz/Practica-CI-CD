@@ -1,8 +1,8 @@
-import { Component, inject, signal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component, computed, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Login } from '../../components/login/login';
 import { LoginRequest } from '../../shared/interfaces/user.interface';
+import { extractApiError } from '../../../../shared/utils/extract-api.error.utils';
 
 @Component({
   selector: 'app-login-page',
@@ -21,15 +21,10 @@ export class LoginPage {
 
   isLoading = this.#authService.isSyncing;
   show2FA = this.#authService.show2faInput;
+  loginError = computed(() => extractApiError(this.loginResource.error()));
 
   handleLogin(credentials: LoginRequest): void {
     this.#loginSignal.set(credentials);
-  }
-
-  get loginError(): string | undefined {
-    const err = this.loginResource.error();
-    if (!err) return undefined;
-    return (err as unknown as HttpErrorResponse).error?.message ?? err.message;
   }
 
   handleVerify2FA(code: string): void {

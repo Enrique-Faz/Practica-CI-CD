@@ -45,7 +45,7 @@ export class AuthService {
           this.#tempUserId.set(res.temp_user_id);
           this.show2faInput.set(true);
         } else if (res.token) {
-          this.#updateSession({ token: res.token, user: res.user });
+          this.#updateSession({ token: res.token, user: res.user, expiresAt: res.expiresAt });
           this.#router.navigate(['/board']);
         }
       }
@@ -70,7 +70,7 @@ export class AuthService {
       this.isSyncing.set(resource.isLoading());
       if (resource.hasValue()) {
         const res = resource.value() as AuthResponse;
-        this.#updateSession({ token: res.token, user: res.user });
+        this.#updateSession({ token: res.token, user: res.user, expiresAt: res.expiresAt });
         this.show2faInput.set(false);
         this.#tempUserId.set(null);
         this.#router.navigate(['/board']);
@@ -93,7 +93,7 @@ export class AuthService {
       this.isSyncing.set(resource.isLoading());
       if (resource.hasValue()) {
         const res = resource.value() as AuthResponse;
-        this.#updateSession({ token: res.token, user: res.user });
+        this.#updateSession({ token: res.token, user: res.user, expiresAt: res.expiresAt });
         this.#router.navigate(['/board']);
       }
     });
@@ -127,7 +127,12 @@ export class AuthService {
     const data = localStorage.getItem(STORAGE_KEY);
     if (!data) return undefined;
     try {
-      return JSON.parse(data) as LoggedUser;
+      const session = JSON.parse(data) as LoggedUser;
+      if (session.expiresAt && new Date(session.expiresAt) < new Date()) {
+        localStorage.removeItem(STORAGE_KEY);
+        return undefined;
+      }
+      return session;
     } catch {
       return undefined;
     }

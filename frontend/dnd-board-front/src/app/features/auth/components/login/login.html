@@ -7,9 +7,10 @@
       <p class="text-stone-400 text-sm mt-2">Accede a tu tablero de D&D</p>
     </div>
 
-    <!-- Error global -->
     @if (errorMessage()) {
-      <div class="mb-5 p-3 bg-red-900/20 border border-red-500/50 rounded-lg text-red-300 text-xs">
+      <div
+        class="mb-5 p-3 bg-red-900/20 border border-red-500/50 rounded-lg text-red-300 text-xs font-bold"
+      >
         {{ errorMessage() }}
       </div>
     }

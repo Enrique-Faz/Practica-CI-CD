@@ -2,7 +2,7 @@
   <app-login
     (loginOutput)="handleLogin($event)"
     [isLoading]="isLoading()"
-    [errorMessage]="loginError"
+    [errorMessage]="loginError()"
   />
 } @else {
   <!-- Sección 2FA -->

@@ -12,7 +12,7 @@ import { LoginRequest } from '../../shared/interfaces/user.interface';
 export class Login {
   loginModel = signal<LoginRequest>({ email: '', password: '' });
 
-  errorMessage = input<string>();
+  errorMessage = input<string | undefined>();
   isLoading = input<boolean>(false);
 
   loginOutput = output<LoginRequest>();
