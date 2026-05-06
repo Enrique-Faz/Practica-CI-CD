@@ -96,7 +96,7 @@ class AuthController extends Controller
     /* 2. VERIFICACIÓN DE 2FA (Segunda fase del login)                            */
     /* -------------------------------------------------------------------------- */
 
-    public function me(Request $request)
+    public function user(Request $request)
     {
         return new UserResource($request->user());
     }
