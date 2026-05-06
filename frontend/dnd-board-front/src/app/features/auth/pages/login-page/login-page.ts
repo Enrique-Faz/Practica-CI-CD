@@ -1,5 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { AuthService } from '../../../../core/services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { Login } from '../../components/login/login';
 import { LoginRequest } from '../../shared/interfaces/user.interface';
 import { extractApiError } from '../../../../shared/utils/extract-api.error.utils';

@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../features/auth/shared/services/auth.service';
 import { convertKeysToSnakeCase } from '../utils/case-converter.utils';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {

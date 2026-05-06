@@ -1,5 +1,5 @@
 import { User } from '../../../auth/shared/interfaces/user.interface';
-import { Character } from './character.interface';
+import { Character } from '../../../characters/shared/interfaces/character.interface';
 
 export interface Board {
   id: number;

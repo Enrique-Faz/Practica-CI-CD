@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { preventUnsavedGuard } from '../../core/guards/prevent-unsaved.guard';
 
 export const AUTH_ROUTES: Routes = [
   {
@@ -8,6 +9,7 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'register',
     loadComponent: () => import('./pages/register-page/register-page').then((m) => m.RegisterPage),
+    canDeactivate: [preventUnsavedGuard],
   },
   {
     path: '',

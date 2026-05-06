@@ -1,0 +1,96 @@
+<div class="min-h-screen bg-stone-950 px-4 py-12">
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <h1 class="text-3xl font-black text-amber-400 uppercase tracking-wider">Mis Partidas</h1>
+        <p class="text-stone-400 text-sm mt-1">Tableros de batalla donde participas</p>
+      </div>
+      <button
+        (click)="openCreateModal()"
+        class="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-stone-900 font-bold rounded-lg transition-all uppercase text-sm tracking-wide shadow-lg shadow-amber-900/30 active:scale-95"
+      >
+        + Nueva Partida
+      </button>
+    </div>
+
+    <!-- Loading -->
+    @if (isLoading()) {
+      <div class="flex justify-center py-20">
+        <span class="text-amber-400 animate-pulse font-bold uppercase tracking-widest text-sm">
+          Cargando partidas...
+        </span>
+      </div>
+    }
+
+    <!-- Empty State -->
+    @if (!isLoading() && boards().length === 0) {
+      <div class="text-center py-20">
+        <p class="text-stone-500 text-lg font-medium">No tienes partidas todavía</p>
+        <p class="text-stone-600 text-sm mt-2">Crea tu primera partida para empezar a jugar</p>
+      </div>
+    }
+
+    <!-- Board List -->
+    @if (!isLoading() && boards().length > 0) {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (board of boards(); track board.id) {
+          <div
+            class="relative group bg-stone-900/60 border border-amber-900/30 rounded-xl overflow-hidden shadow-lg hover:border-amber-600/50 transition-all"
+          >
+            <!-- Background preview -->
+            <div class="h-32 bg-stone-800 flex items-center justify-center">
+              @if (board.backgroundImage) {
+                <img
+                  [src]="'backgrounds/' + board.backgroundImage"
+                  [alt]="board.name"
+                  class="w-full h-full object-cover opacity-60"
+                />
+              } @else {
+                <span class="text-4xl opacity-30">🗺️</span>
+              }
+            </div>
+
+            <!-- Content -->
+            <div class="p-5">
+              <h3 class="text-lg font-black text-stone-100 uppercase tracking-wide">
+                {{ board.name }}
+              </h3>
+              @if (board.dm) {
+                <p class="text-xs text-stone-500 mt-1">
+                  DM: {{ board.dm.firstName }} {{ board.dm.lastName }}
+                </p>
+              }
+              <p class="text-xs text-stone-600 mt-1">
+                {{ board.characters.length }} personaje{{
+                  board.characters.length !== 1 ? 's' : ''
+                }}
+              </p>
+
+              <!-- Actions -->
+              <div class="flex gap-2 mt-4">
+                <a
+                  [routerLink]="['/board', board.id]"
+                  class="flex-1 py-2 text-center bg-amber-700/30 hover:bg-amber-700/50 text-amber-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
+                >
+                  Entrar
+                </a>
+                <button
+                  (click)="confirmDelete(board.id, board.name)"
+                  class="px-3 py-2 bg-red-900/30 hover:bg-red-900/50 text-red-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
+                >
+                  Borrar
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<!-- Create Board Modal -->
+@if (showCreateModal()) {
+  <app-create-board-modal />
+}

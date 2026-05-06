@@ -27,8 +27,10 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  token: string;
-  user: User;
+  data?: {
+    token: string;
+    user: User;
+  };
   expiresAt?: string;
   require_2fa?: boolean;
   temp_user_id?: number;

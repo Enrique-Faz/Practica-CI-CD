@@ -2,13 +2,13 @@ import { HttpClient, HttpResourceRef, httpResource } from '@angular/common/http'
 import { Injectable, WritableSignal, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../../environments/environment';
 import {
   AuthResponse,
   LoginRequest,
   LoggedUser,
   RegisterRequest,
-} from '../../features/auth/shared/interfaces/user.interface';
+} from '../interfaces/user.interface';
 
 const API = environment.apiEndpoint;
 const STORAGE_KEY = 'auth_session';
@@ -24,7 +24,6 @@ export class AuthService {
   currentUser = computed(() => this.#currentUserSignal());
   isSyncing = signal<boolean>(false);
   show2faInput = signal<boolean>(false);
-
   isLoggedIn = computed(() => Boolean(this.currentUser()));
   isAdmin = computed(() => this.currentUser()?.user.role === 'admin');
 
@@ -44,9 +43,13 @@ export class AuthService {
         if (res.require_2fa && res.temp_user_id) {
           this.#tempUserId.set(res.temp_user_id);
           this.show2faInput.set(true);
-        } else if (res.token) {
-          this.#updateSession({ token: res.token, user: res.user, expiresAt: res.expiresAt });
-          this.#router.navigate(['/board']);
+        } else if (res.data?.token) {
+          this.#updateSession({
+            token: res.data.token,
+            user: res.data.user,
+            expiresAt: res.expiresAt,
+          });
+          this.#router.navigate(['/dashboard']);
         }
       }
     });
@@ -70,10 +73,16 @@ export class AuthService {
       this.isSyncing.set(resource.isLoading());
       if (resource.hasValue()) {
         const res = resource.value() as AuthResponse;
-        this.#updateSession({ token: res.token, user: res.user, expiresAt: res.expiresAt });
-        this.show2faInput.set(false);
-        this.#tempUserId.set(null);
-        this.#router.navigate(['/board']);
+        if (res.data?.token) {
+          this.#updateSession({
+            token: res.data.token,
+            user: res.data.user,
+            expiresAt: res.expiresAt,
+          });
+          this.show2faInput.set(false);
+          this.#tempUserId.set(null);
+          this.#router.navigate(['/dashboard']);
+        }
       }
     });
 
@@ -93,8 +102,14 @@ export class AuthService {
       this.isSyncing.set(resource.isLoading());
       if (resource.hasValue()) {
         const res = resource.value() as AuthResponse;
-        this.#updateSession({ token: res.token, user: res.user, expiresAt: res.expiresAt });
-        this.#router.navigate(['/board']);
+        if (res.data?.token) {
+          this.#updateSession({
+            token: res.data.token,
+            user: res.data.user,
+            expiresAt: res.expiresAt,
+          });
+          this.#router.navigate(['/dashboard']);
+        }
       }
     });
 

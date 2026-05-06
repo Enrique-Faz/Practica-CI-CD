@@ -1,0 +1,74 @@
+<div
+  class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-md"
+>
+  <div class="w-full max-w-md bg-stone-900 border border-amber-900/40 rounded-2xl p-8 shadow-2xl shadow-black/50">
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h3 class="text-2xl font-black text-amber-400 uppercase tracking-wider">Nueva Partida</h3>
+      <p class="text-stone-400 text-sm mt-2">Crea un nuevo tablero de batalla</p>
+    </div>
+
+    <form class="space-y-5">
+      <!-- Name -->
+      <label class="block">
+        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1">Nombre</span>
+        <input
+          [formField]="boardForm.name"
+          type="text"
+          placeholder="La guarida del dragón"
+          class="mt-1 w-full px-4 py-3 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 placeholder-stone-600 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
+        />
+        @if (boardForm.name().invalid() && boardForm.name().touched()) {
+          <p class="text-[10px] text-red-400 font-bold mt-1 uppercase tracking-tighter ml-1">
+            {{ boardForm.name().errors()[0].message }}
+          </p>
+        }
+      </label>
+
+      <!-- Background Selection -->
+      <div class="block">
+        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1">Fondo del tablero</span>
+        <div class="grid grid-cols-2 gap-3 mt-2">
+          @for (bg of backgrounds; track bg.value) {
+            <button
+              type="button"
+              (click)="boardModel.update(m => ({ ...m, backgroundImage: bg.value }))"
+              class="p-3 rounded-lg border text-sm font-bold uppercase tracking-wide transition-all"
+              [class.border-amber-500]="boardModel().backgroundImage === bg.value"
+              [class.bg-amber-700/20]="boardModel().backgroundImage === bg.value"
+              [class.text-amber-400]="boardModel().backgroundImage === bg.value"
+              [class.border-stone-700]="boardModel().backgroundImage !== bg.value"
+              [class.bg-stone-800/50]="boardModel().backgroundImage !== bg.value"
+              [class.text-stone-400]="boardModel().backgroundImage !== bg.value"
+            >
+              {{ bg.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="grid grid-cols-2 gap-4 pt-4">
+        <button
+          type="button"
+          (click)="dismiss()"
+          class="w-full py-3 bg-stone-800 border border-stone-700 text-stone-300 hover:bg-stone-700 hover:text-stone-100 font-bold rounded-lg transition-all uppercase tracking-widest text-xs"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          (click)="submit()"
+          [disabled]="boardForm().invalid() || isSaving()"
+          class="w-full py-3 bg-amber-600 hover:bg-amber-500 disabled:bg-stone-700 disabled:cursor-not-allowed text-stone-900 font-black rounded-lg shadow-lg shadow-amber-900/30 transition-all uppercase tracking-wide text-xs active:scale-95"
+        >
+          @if (isSaving()) {
+            <span class="animate-pulse">Creando...</span>
+          } @else {
+            Crear Partida
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

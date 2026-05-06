@@ -10,6 +10,12 @@ export const routes: Routes = [
     canActivate: [guestGuard],
   },
   {
+    path: 'dashboard',
+    loadChildren: () =>
+      import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
+    canActivate: [authGuard],
+  },
+  {
     path: 'board',
     loadChildren: () => import('./features/board/board.routes').then((m) => m.BOARD_ROUTES),
     canActivate: [authGuard],
@@ -21,7 +27,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: '/board',
+    redirectTo: '/dashboard',
     pathMatch: 'full',
   },
   {
