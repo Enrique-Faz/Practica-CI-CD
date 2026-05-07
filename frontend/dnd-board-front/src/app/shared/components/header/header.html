@@ -15,63 +15,51 @@
       <!-- Nav central -->
       <div class="hidden md:flex items-center justify-center gap-12">
         @if (currentUser()) {
-          <!-- Active board indicator -->
-          @if (activeBoardName()) {
+          <a
+            routerLink="/dashboard"
+            routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="group flex flex-col items-center cursor-pointer"
+          >
+            <span
+              class="text-sm font-bold uppercase tracking-[0.2em] transition-colors text-stone-400 group-[.is-active]:text-amber-400"
+            >
+              Dashboard
+            </span>
             <div
-              class="flex items-center gap-2 px-4 py-1.5 bg-amber-900/20 border border-amber-700/30 rounded-lg"
-            >
-              <span class="text-amber-500 text-sm">🎯</span>
-              <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">
-                {{ activeBoardName() }}
-              </span>
-            </div>
-          } @else {
-            <a
-              routerLink="/dashboard"
-              routerLinkActive="is-active"
-              [routerLinkActiveOptions]="{ exact: true }"
-              class="group flex flex-col items-center cursor-pointer"
-            >
-              <span
-                class="text-sm font-bold uppercase tracking-[0.2em] transition-colors text-stone-400 group-[.is-active]:text-amber-400"
-              >
-                Dashboard
-              </span>
-              <div
-                class="h-0.5 bg-amber-400 transition-all duration-300 mt-1 w-0 group-[.is-active]:w-full"
-              ></div>
-            </a>
+              class="h-0.5 bg-amber-400 transition-all duration-300 mt-1 w-0 group-[.is-active]:w-full"
+            ></div>
+          </a>
 
-            <a
-              routerLink="/dashboard/my-boards"
-              routerLinkActive="is-active"
-              class="group flex flex-col items-center cursor-pointer"
+          <a
+            routerLink="/dashboard/my-boards"
+            routerLinkActive="is-active"
+            class="group flex flex-col items-center cursor-pointer"
+          >
+            <span
+              class="text-sm font-bold uppercase tracking-[0.2em] transition-colors text-stone-400 group-[.is-active]:text-amber-400"
             >
-              <span
-                class="text-sm font-bold uppercase tracking-[0.2em] transition-colors text-stone-400 group-[.is-active]:text-amber-400"
-              >
-                Partidas
-              </span>
-              <div
-                class="h-0.5 bg-amber-400 transition-all duration-300 mt-1 w-0 group-[.is-active]:w-full"
-              ></div>
-            </a>
+              Partidas
+            </span>
+            <div
+              class="h-0.5 bg-amber-400 transition-all duration-300 mt-1 w-0 group-[.is-active]:w-full"
+            ></div>
+          </a>
 
-            <a
-              routerLink="/dashboard/my-characters"
-              routerLinkActive="is-active"
-              class="group flex flex-col items-center cursor-pointer"
+          <a
+            routerLink="/dashboard/my-characters"
+            routerLinkActive="is-active"
+            class="group flex flex-col items-center cursor-pointer"
+          >
+            <span
+              class="text-sm font-bold uppercase tracking-[0.2em] transition-colors text-stone-400 group-[.is-active]:text-amber-400"
             >
-              <span
-                class="text-sm font-bold uppercase tracking-[0.2em] transition-colors text-stone-400 group-[.is-active]:text-amber-400"
-              >
-                Personajes
-              </span>
-              <div
-                class="h-0.5 bg-amber-400 transition-all duration-300 mt-1 w-0 group-[.is-active]:w-full"
-              ></div>
-            </a>
-          }
+              Personajes
+            </span>
+            <div
+              class="h-0.5 bg-amber-400 transition-all duration-300 mt-1 w-0 group-[.is-active]:w-full"
+            ></div>
+          </a>
 
           @if (isAdmin()) {
             <a
