@@ -1,3 +1,5 @@
+import { CharacterClass } from '../types/character-class.enum';
+
 export interface CharacterStats {
   strength: number;
   dexterity: number;
@@ -18,6 +20,7 @@ export interface Character {
   name: string;
   hp: number;
   speed: number;
+  class: CharacterClass;
   stats: CharacterStats;
   position?: CharacterPosition;
 }

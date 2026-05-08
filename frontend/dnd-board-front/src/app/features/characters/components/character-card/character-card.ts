@@ -12,6 +12,8 @@ export class CharacterCard {
   onEdit = output<Character>();
   onDelete = output<Character>();
 
+  classImage = computed(() => `/Clases/${this.character().class}.png`);
+
   stats = computed(() => {
     const stats = this.character().stats;
     return [

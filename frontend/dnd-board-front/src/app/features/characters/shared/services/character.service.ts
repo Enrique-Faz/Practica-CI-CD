@@ -4,11 +4,13 @@ import { httpResource } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment';
 import { Character } from '../interfaces/character.interface';
+import { CharacterClass } from '../types/character-class.enum';
 
 const API = environment.apiEndpoint;
 
 export interface CreateCharacterRequest {
   name: string;
+  class: CharacterClass;
   hp: number;
   speed: number;
   strength: number;

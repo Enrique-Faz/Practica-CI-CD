@@ -1,7 +1,9 @@
 <div
   class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-md"
 >
-  <div class="w-full max-w-lg bg-stone-900 border border-amber-900/40 rounded-2xl p-8 shadow-2xl shadow-black/50 max-h-[90vh] overflow-y-auto">
+  <div
+    class="w-full max-w-lg bg-stone-900 border border-amber-900/40 rounded-2xl p-8 shadow-2xl shadow-black/50 max-h-[90vh] overflow-y-auto"
+  >
     <!-- Header -->
     <div class="text-center mb-8">
       <h3 class="text-2xl font-black text-amber-400 uppercase tracking-wider">
@@ -31,6 +33,27 @@
         }
       </label>
 
+      <!-- Clase -->
+      <label class="block">
+        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1">Clase</span>
+        <div class="mt-1 flex items-center gap-3">
+          <img
+            [src]="'/Clases/' + characterModel().class + '.png'"
+            [alt]="characterModel().class"
+            class="w-12 h-12 rounded-lg object-cover border border-amber-900/40 shrink-0"
+          />
+          <select
+            [value]="characterModel().class"
+            (change)="onClassChange($event)"
+            class="w-full px-4 py-3 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 capitalize focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
+          >
+            @for (cls of classes; track cls) {
+              <option [value]="cls" class="capitalize bg-stone-900">{{ cls }}</option>
+            }
+          </select>
+        </div>
+      </label>
+
       <!-- HP & Speed -->
       <div class="grid grid-cols-2 gap-4">
         <label class="block">
@@ -38,16 +61,16 @@
           <input
             [formField]="characterForm.hp"
             type="number"
-
             class="mt-1 w-full px-4 py-3 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
           />
         </label>
         <label class="block">
-          <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1">Velocidad</span>
+          <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1"
+            >Velocidad</span
+          >
           <input
             [formField]="characterForm.speed"
             type="number"
-
             class="mt-1 w-full px-4 py-3 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
           />
         </label>
@@ -55,65 +78,67 @@
 
       <!-- Stats -->
       <div>
-        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1 block mb-2">Estadísticas (1-30)</span>
+        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1 block mb-2"
+          >Estadísticas (1-30)</span
+        >
         <div class="grid grid-cols-3 gap-3">
           <label class="block">
-            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1">Fuerza</span>
+            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1"
+              >Fuerza</span
+            >
             <input
               [formField]="characterForm.strength"
               type="number"
-
-
               class="mt-1 w-full px-3 py-2 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 text-center focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
             />
           </label>
           <label class="block">
-            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1">Destreza</span>
+            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1"
+              >Destreza</span
+            >
             <input
               [formField]="characterForm.dexterity"
               type="number"
-
-
               class="mt-1 w-full px-3 py-2 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 text-center focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
             />
           </label>
           <label class="block">
-            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1">Constitución</span>
+            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1"
+              >Constitución</span
+            >
             <input
               [formField]="characterForm.constitution"
               type="number"
-
-
               class="mt-1 w-full px-3 py-2 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 text-center focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
             />
           </label>
           <label class="block">
-            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1">Inteligencia</span>
+            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1"
+              >Inteligencia</span
+            >
             <input
               [formField]="characterForm.intelligence"
               type="number"
-
-
               class="mt-1 w-full px-3 py-2 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 text-center focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
             />
           </label>
           <label class="block">
-            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1">Sabiduría</span>
+            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1"
+              >Sabiduría</span
+            >
             <input
               [formField]="characterForm.wisdom"
               type="number"
-
-
               class="mt-1 w-full px-3 py-2 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 text-center focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
             />
           </label>
           <label class="block">
-            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1">Carisma</span>
+            <span class="text-[10px] font-bold uppercase text-stone-500 tracking-wider ml-1"
+              >Carisma</span
+            >
             <input
               [formField]="characterForm.charisma"
               type="number"
-
-
               class="mt-1 w-full px-3 py-2 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 text-center focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
             />
           </label>

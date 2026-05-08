@@ -4,6 +4,7 @@ import { FormField, form, required, maxLength } from '@angular/forms/signals';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { CharacterService, CreateCharacterRequest } from '../../shared/services/character.service';
 import { Character } from '../../shared/interfaces/character.interface';
+import { CharacterClass } from '../../shared/types/character-class.enum';
 
 @Component({
   selector: 'app-character-form-modal',
@@ -14,12 +15,15 @@ export class CharacterFormModal implements OnInit {
   readonly #modalService = inject(ModalService);
   readonly #characterService = inject(CharacterService);
 
+  readonly classes = Object.values(CharacterClass);
+
   isSaving = signal(false);
   isEditing = computed(() => this.#modalService.modalData() !== null);
   editingCharacter = computed(() => this.#modalService.modalData() as Character | null);
 
   characterModel = signal<CreateCharacterRequest>({
     name: '',
+    class: CharacterClass.Guerrero,
     hp: 10,
     speed: 30,
     strength: 10,
@@ -40,6 +44,7 @@ export class CharacterFormModal implements OnInit {
     if (data) {
       this.characterModel.set({
         name: data.name,
+        class: data.class,
         hp: data.hp,
         speed: data.speed,
         strength: data.stats.strength,
@@ -50,6 +55,11 @@ export class CharacterFormModal implements OnInit {
         charisma: data.stats.charisma,
       });
     }
+  }
+
+  onClassChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    this.characterModel.update((m) => ({ ...m, class: value as CharacterClass }));
   }
 
   submit(): void {
