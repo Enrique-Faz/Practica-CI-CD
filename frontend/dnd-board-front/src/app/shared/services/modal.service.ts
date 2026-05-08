@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +11,11 @@ export class ModalService {
 
   #result$ = new Subject<unknown>();
 
-  open<T = unknown>(modalId: string, data?: unknown): Observable<T> {
+  open<T = unknown, D = unknown>(modalId: string, data?: D): Observable<T> {
     this.activeModal.set(modalId);
-    this.modalData.set(data ?? null);
+    this.modalData.set((data ?? null) as unknown);
     this.#result$ = new Subject<unknown>();
-    return this.#result$.asObservable() as Observable<T>;
+    return (this.#result$ as Subject<T>).asObservable().pipe(take(1));
   }
 
   close(result?: unknown): void {

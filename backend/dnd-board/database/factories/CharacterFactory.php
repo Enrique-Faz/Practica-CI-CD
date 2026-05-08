@@ -21,6 +21,7 @@ class CharacterFactory extends Factory
         return [
             'user_id' => User::factory(),
             'name' => fake()->name() . " el " . fake()->jobTitle(),
+            'class' => fake()->randomElement(['guerrero', 'mago', 'picaro', 'clerigo', 'paladin', 'explorador', 'bardo', 'druida', 'barbaro', 'monje', 'hechicero']),
             'hp' => fake()->numberBetween(10, 50),
             'speed' => fake()->randomElement([25, 30, 35]),
             'strength' => fake()->numberBetween(8, 18),

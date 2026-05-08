@@ -13,6 +13,7 @@ class CharacterResource extends JsonResource
             'id' => $this->id,
             'userId' => $this->user_id,
             'name' => $this->name,
+            'class' => $this->class,
             'hp' => $this->hp,
             'speed' => $this->speed,
             'stats' => [

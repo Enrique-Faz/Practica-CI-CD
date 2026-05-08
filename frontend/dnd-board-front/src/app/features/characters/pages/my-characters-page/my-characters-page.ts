@@ -4,11 +4,12 @@ import { CharacterService } from '../../shared/services/character.service';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { PopupService } from '../../../../shared/services/popup.service';
 import { CharacterFormModal } from '../../components/character-form-modal/character-form-modal';
+import { CharacterCard } from '../../components/character-card/character-card';
 import { Character } from '../../shared/interfaces/character.interface';
 
 @Component({
   selector: 'app-my-characters-page',
-  imports: [CharacterFormModal],
+  imports: [CharacterFormModal, CharacterCard],
   templateUrl: './my-characters-page.html',
 })
 export class MyCharactersPage {

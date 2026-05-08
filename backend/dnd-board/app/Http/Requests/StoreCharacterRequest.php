@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CharacterClass;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreCharacterRequest extends FormRequest
 {
@@ -24,6 +26,7 @@ class StoreCharacterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'class' => ['required', 'string', new Enum(CharacterClass::class)],
             'hp' => 'required|integer|min:1',
             'speed' => 'required|integer|min:1',
             'strength' => 'required|integer|between:1,30',

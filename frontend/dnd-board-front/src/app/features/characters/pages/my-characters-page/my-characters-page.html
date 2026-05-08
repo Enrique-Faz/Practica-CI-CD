@@ -27,74 +27,21 @@
     @if (!isLoading() && characters().length === 0) {
       <div class="text-center py-20">
         <p class="text-stone-500 text-lg font-medium">No tienes personajes todavía</p>
-        <p class="text-stone-600 text-sm mt-2">Crea tu primer personaje para unirte a una partida</p>
+        <p class="text-stone-600 text-sm mt-2">
+          Crea tu primer personaje para unirte a una partida
+        </p>
       </div>
     }
 
     <!-- Character List -->
     @if (!isLoading() && characters().length > 0) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="flex flex-col gap-4">
         @for (character of characters(); track character.id) {
-          <div class="bg-stone-900/60 border border-amber-900/30 rounded-xl p-6 shadow-lg hover:border-amber-600/50 transition-all">
-            <!-- Name & HP -->
-            <div class="flex items-start justify-between mb-4">
-              <h3 class="text-lg font-black text-stone-100 uppercase tracking-wide">
-                {{ character.name }}
-              </h3>
-              <span class="px-2 py-1 bg-red-900/30 border border-red-700/40 rounded-md text-red-400 text-xs font-bold">
-                {{ character.hp }} HP
-              </span>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="grid grid-cols-3 gap-2 mb-4">
-              <div class="text-center p-2 bg-stone-800/50 rounded-lg">
-                <p class="text-[10px] text-stone-500 uppercase font-bold">FUE</p>
-                <p class="text-sm font-black text-stone-200">{{ character.stats.strength }}</p>
-              </div>
-              <div class="text-center p-2 bg-stone-800/50 rounded-lg">
-                <p class="text-[10px] text-stone-500 uppercase font-bold">DES</p>
-                <p class="text-sm font-black text-stone-200">{{ character.stats.dexterity }}</p>
-              </div>
-              <div class="text-center p-2 bg-stone-800/50 rounded-lg">
-                <p class="text-[10px] text-stone-500 uppercase font-bold">CON</p>
-                <p class="text-sm font-black text-stone-200">{{ character.stats.constitution }}</p>
-              </div>
-              <div class="text-center p-2 bg-stone-800/50 rounded-lg">
-                <p class="text-[10px] text-stone-500 uppercase font-bold">INT</p>
-                <p class="text-sm font-black text-stone-200">{{ character.stats.intelligence }}</p>
-              </div>
-              <div class="text-center p-2 bg-stone-800/50 rounded-lg">
-                <p class="text-[10px] text-stone-500 uppercase font-bold">SAB</p>
-                <p class="text-sm font-black text-stone-200">{{ character.stats.wisdom }}</p>
-              </div>
-              <div class="text-center p-2 bg-stone-800/50 rounded-lg">
-                <p class="text-[10px] text-stone-500 uppercase font-bold">CAR</p>
-                <p class="text-sm font-black text-stone-200">{{ character.stats.charisma }}</p>
-              </div>
-            </div>
-
-            <!-- Speed -->
-            <p class="text-xs text-stone-500 mb-4">
-              Velocidad: <span class="text-stone-300 font-bold">{{ character.speed }}</span>
-            </p>
-
-            <!-- Actions -->
-            <div class="flex gap-2">
-              <button
-                (click)="openEditModal(character)"
-                class="flex-1 py-2 text-center bg-amber-700/30 hover:bg-amber-700/50 text-amber-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
-              >
-                Editar
-              </button>
-              <button
-                (click)="confirmDelete(character.id, character.name)"
-                class="px-3 py-2 bg-red-900/30 hover:bg-red-900/50 text-red-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
-              >
-                Borrar
-              </button>
-            </div>
-          </div>
+          <app-character-card
+            [character]="character"
+            (onEdit)="openEditModal($event)"
+            (onDelete)="confirmDelete($event.id, $event.name)"
+          />
         }
       </div>
     }

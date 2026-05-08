@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\CharacterClass;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateCharacterRequest extends FormRequest
 {
@@ -26,6 +28,7 @@ class UpdateCharacterRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
+            'class' => ['sometimes', 'string', new Enum(CharacterClass::class)],
             'hp' => 'sometimes|integer|min:1',
             'speed' => 'sometimes|integer|min:1',
             'strength' => 'sometimes|integer|between:1,30',

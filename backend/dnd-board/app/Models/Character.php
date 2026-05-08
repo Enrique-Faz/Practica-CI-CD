@@ -14,6 +14,7 @@ class Character extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'class',
         'hp',
         'strength',
         'dexterity',
@@ -23,10 +24,6 @@ class Character extends Model
         'charisma',
         'speed'
     ];
-
-    /* -------------------------------------------------------------------------- */
-    /* RELACIONES                                                                 */
-    /* -------------------------------------------------------------------------- */
 
     public function user(): BelongsTo
     {
