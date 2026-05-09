@@ -9,6 +9,7 @@ export const BOARD_ROUTES: Routes = [
   {
     path: ':id',
     loadComponent: () => import('./pages/board-page/board-page').then((m) => m.BoardPage),
+    data: { hideFooter: true },
   },
   {
     path: '',

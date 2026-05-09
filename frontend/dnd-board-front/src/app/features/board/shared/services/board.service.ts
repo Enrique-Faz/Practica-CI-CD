@@ -112,7 +112,11 @@ export class BoardService {
   }
 
   moveCharacter(boardId: number, data: MoveCharacterRequest) {
-    return this.#http.post<{ message: string }>(`${API}/boards/${boardId}/move`, data);
+    return this.#http.post<{ message: string }>(`${API}/boards/${boardId}/move`, {
+      characterId: data.characterId,
+      positionX: data.x,
+      positionY: data.y,
+    });
   }
 
   nextTurn(boardId: number) {
@@ -120,8 +124,8 @@ export class BoardService {
   }
 
   updateInitiativeOrder(boardId: number, characterIds: number[]) {
-    const initiative_order = characterIds.map((id) => ({ character_id: id }));
-    return this.#http.put<{ data: Board }>(`${API}/boards/${boardId}`, { initiative_order });
+    const initiativeOrder = characterIds.map((id) => ({ characterId: id }));
+    return this.#http.put<{ data: Board }>(`${API}/boards/${boardId}`, { initiativeOrder });
   }
 
   refresh(): void {

@@ -55,12 +55,8 @@
       @for (cell of cells(); track cellKey(cell)) {
         <div
           class="border border-stone-900/80 relative transition-colors duration-100 cursor-pointer"
-          [class.bg-amber-400]="isReachable(cell)"
-          [class.opacity-30]="isReachable(cell)"
-          [class.bg-red-500]="isOccupied(cell) && !isReachable(cell)"
-          [class.opacity-0]="isOccupied(cell) && !isReachable(cell)"
-          [class.hover:bg-stone-100]="!isOccupied(cell)"
-          [class.hover:opacity-10]="!isOccupied(cell)"
+          [class.bg-amber-400/30]="isReachable(cell)"
+          [class.hover:bg-stone-100/10]="!isOccupied(cell)"
           (click)="onCellClick(cell)"
         >
           @if (characterAt(cell); as character) {
