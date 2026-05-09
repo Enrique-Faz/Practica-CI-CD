@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\BoardMap;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreBoardRequest extends FormRequest
 {
@@ -24,7 +26,7 @@ class StoreBoardRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'background_image' => 'required|string|in:forest.jpg,dungeon.jpg,tavern.jpg,cave.jpg',
+            'background_image' => ['required', 'string', new Enum(BoardMap::class)],
         ];
     }
 }

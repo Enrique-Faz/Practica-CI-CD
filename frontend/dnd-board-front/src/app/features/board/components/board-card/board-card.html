@@ -5,7 +5,7 @@
   <div class="h-32 bg-stone-800 flex items-center justify-center">
     @if (board().backgroundImage) {
       <img
-        [src]="'backgrounds/' + board().backgroundImage"
+        [src]="'/mapas/' + board().backgroundImage"
         [alt]="board().name"
         class="w-full h-full object-cover opacity-60"
       />

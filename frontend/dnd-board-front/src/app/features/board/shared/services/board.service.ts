@@ -4,12 +4,13 @@ import { httpResource } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment';
 import { Board } from '../interfaces/board.interface';
+import { BoardMap } from '../types/board-map.enum';
 
 const API = environment.apiEndpoint;
 
 export interface CreateBoardRequest {
   name: string;
-  backgroundImage: string;
+  background_image: BoardMap;
 }
 
 @Injectable({

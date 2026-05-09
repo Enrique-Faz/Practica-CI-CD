@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\BoardMap;
 use App\Models\Board;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,12 +22,7 @@ class BoardFactory extends Factory
         return [
             'name' => "Campaña: " . fake()->sentence(3),
             'dm_id' => User::where('role', 'normal')->inRandomOrder()->first()->id ?? User::factory(),
-            'background_image' => fake()->randomElement([
-                'forest.jpg',
-                'dungeon.jpg',
-                'tavern.jpg',
-                'cave.jpg'
-            ]),
+            'background_image' => fake()->randomElement(array_column(BoardMap::cases(), 'value')),
             'initiative_order' => null,
             'current_turn_index' => 0,
         ];
