@@ -1,0 +1,74 @@
+<div class="flex flex-col h-screen bg-stone-950 text-stone-100 overflow-hidden">
+  <!-- Loading inicial (sin datos previos) -->
+  @if (!board() && boardResource.isLoading()) {
+    <div class="flex-1 flex items-center justify-center">
+      <span class="text-stone-400 animate-pulse">Cargando tablero...</span>
+    </div>
+  } @else if (!board() && boardResource.error()) {
+    <div class="flex-1 flex items-center justify-center">
+      <span class="text-red-400">No se pudo cargar el tablero.</span>
+    </div>
+  } @else if (board()) {
+    <!-- Toolbar superior (solo DM) -->
+    @if (isDm()) {
+      <div
+        class="flex items-center gap-3 px-4 py-2 bg-stone-900 border-b border-stone-800 shrink-0"
+      >
+        <app-grid-config-panel
+          [board]="board()!"
+          (onGridSaved)="onGridSaved($event)"
+          (previewChanged)="previewGrid.set($event)"
+        />
+
+        <!-- Controles de zoom -->
+        <div class="flex items-center gap-2 ml-auto">
+          <button
+            (click)="zoomOut()"
+            class="w-7 h-7 flex items-center justify-center bg-stone-800 hover:bg-stone-700 rounded text-sm font-bold"
+          >
+            −
+          </button>
+          <span class="text-xs text-stone-400 w-10 text-center">{{ zoomPercent() }}%</span>
+          <button
+            (click)="zoomIn()"
+            class="w-7 h-7 flex items-center justify-center bg-stone-800 hover:bg-stone-700 rounded text-sm font-bold"
+          >
+            +
+          </button>
+          <button (click)="resetZoom()" class="text-xs text-stone-500 hover:text-stone-300 px-2">
+            Reset
+          </button>
+        </div>
+      </div>
+    }
+
+    <!-- Layout principal -->
+    <div class="flex flex-1 overflow-hidden">
+      <!-- Grid del tablero (centro) -->
+      <div class="flex-1 overflow-hidden">
+        <app-board-grid
+          [board]="board()!"
+          [reachableCells]="reachableCells()"
+          [selectedCharacter]="selectedCharacter()"
+          [zoom]="zoom()"
+          [previewGrid]="previewGrid()"
+          (tokenClicked)="onTokenClicked($event)"
+          (cellClicked)="onCellClicked($event)"
+        />
+      </div>
+
+      <!-- Panel derecho: iniciativa + participantes -->
+      <div
+        class="flex flex-col gap-4 p-3 w-72 shrink-0 overflow-y-auto bg-stone-900/50 border-l border-stone-800"
+      >
+        <app-initiative-panel
+          [board]="board()!"
+          [canAdvanceTurn]="canAdvanceTurn()"
+          [canEditInitiative]="isDm()"
+          (nextTurn)="onNextTurn()"
+          (orderChanged)="onOrderChanged($event)"
+        />
+      </div>
+    </div>
+  }
+</div>

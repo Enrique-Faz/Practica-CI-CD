@@ -4,7 +4,12 @@ import { httpResource } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment';
 import { AuthService } from '../../../../features/auth/shared/services/auth.service';
-import { Board, GridCell, MoveCharacterRequest, UpdateGridRequest } from '../interfaces/board.interface';
+import {
+  Board,
+  GridCell,
+  MoveCharacterRequest,
+  UpdateGridRequest,
+} from '../interfaces/board.interface';
 import { BoardMap } from '../types/board-map.enum';
 import { JoinBoardRequest } from '../interfaces/join-board-request.interface';
 import { Character } from '../../../characters/shared/interfaces/character.interface';
@@ -114,16 +119,16 @@ export class BoardService {
     return this.#http.post<Board>(`${API}/boards/${boardId}/next-turn`, {});
   }
 
+  updateInitiativeOrder(boardId: number, characterIds: number[]) {
+    const initiative_order = characterIds.map((id) => ({ character_id: id }));
+    return this.#http.put<{ data: Board }>(`${API}/boards/${boardId}`, { initiative_order });
+  }
+
   refresh(): void {
     this.#refreshTrigger.update((v) => v + 1);
   }
 
   refreshBoard(): void {
     this.#boardRefreshTrigger.update((v) => v + 1);
-  }
-}
-
-  refresh(): void {
-    this.#refreshTrigger.update((v) => v + 1);
   }
 }

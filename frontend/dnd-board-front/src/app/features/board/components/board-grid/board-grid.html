@@ -1,0 +1,79 @@
+<!-- Canvas infinito — arrastrar para moverse -->
+<div
+  class="relative overflow-hidden w-full h-full bg-stone-950"
+  [class.cursor-grabbing]="isPanning()"
+  [class.cursor-grab]="!isPanning()"
+  (wheel)="onWheel($event)"
+  (mousedown)="onPanStart($event)"
+  (mousemove)="onPanMove($event)"
+  (mouseup)="onPanEnd()"
+  (mouseleave)="onPanEnd()"
+>
+  <!-- Tablero centrado + pan + zoom -->
+  <div
+    class="absolute top-1/2 left-1/2 shrink-0 inline-block"
+    [style.transform]="
+      'translate(-50%, -50%) translate(' + panX() + 'px, ' + panY() + 'px) scale(' + zoom() + ')'
+    "
+    [style.transform-origin]="'center'"
+  >
+    <!-- Imagen de fondo — siempre visible, define el tamaño del contenedor -->
+    @if (board().backgroundImage) {
+      <img
+        [src]="'/mapas/' + board().backgroundImage"
+        [alt]="board().name"
+        class="block max-w-none select-none pointer-events-none"
+        (error)="$any($event.target).style.display = 'none'"
+      />
+    } @else {
+      <div class="w-[1280px] h-[960px] bg-stone-800 flex items-center justify-center">
+        <span class="text-stone-600 text-sm italic">Sin imagen de fondo</span>
+      </div>
+    }
+
+    <!-- Placeholder si el DM aún no ha configurado el grid -->
+    @if (!board().gridCols || !board().gridRows) {
+      <div class="absolute inset-0 flex items-center justify-center">
+        <span
+          class="bg-stone-900/70 text-stone-300 text-sm italic px-4 py-2 rounded-lg backdrop-blur-sm"
+        >
+          Configura el grid desde la barra superior
+        </span>
+      </div>
+    }
+
+    <!-- Overlay del grid: siempre visible para que el DM pueda ajustar sobre la imagen -->
+    <div
+      class="absolute inset-0 grid"
+      [style.grid-template-columns]="
+        'repeat(' + (previewGrid()?.cols ?? board().gridCols ?? 20) + ', 1fr)'
+      "
+      [style.grid-template-rows]="
+        'repeat(' + (previewGrid()?.rows ?? board().gridRows ?? 15) + ', 1fr)'
+      "
+    >
+      @for (cell of cells(); track cellKey(cell)) {
+        <div
+          class="border border-stone-900/80 relative transition-colors duration-100 cursor-pointer"
+          [class.bg-amber-400]="isReachable(cell)"
+          [class.opacity-30]="isReachable(cell)"
+          [class.bg-red-500]="isOccupied(cell) && !isReachable(cell)"
+          [class.opacity-0]="isOccupied(cell) && !isReachable(cell)"
+          [class.hover:bg-stone-100]="!isOccupied(cell)"
+          [class.hover:opacity-10]="!isOccupied(cell)"
+          (click)="onCellClick(cell)"
+        >
+          @if (characterAt(cell); as character) {
+            <app-board-token
+              [character]="character"
+              [isSelected]="isSelected(character)"
+              [isCurrentTurn]="isCurrentTurn(character)"
+              [hasInitiative]="hasActiveInitiative()"
+              (click)="onTokenClick(character, $event)"
+            />
+          }
+        </div>
+      }
+    </div>
+  </div>
+</div>

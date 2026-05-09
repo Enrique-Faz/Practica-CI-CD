@@ -24,7 +24,11 @@ class BoardResource extends JsonResource
             'gridRows'         => $this->grid_rows,
             'dm'               => new UserResource($this->whenLoaded('dm')),
             'characters'       => CharacterResource::collection($this->whenLoaded('characters')),
-            'initiativeOrder'  => $this->initiative_order,
+            'initiativeOrder'  => $this->initiative_order
+                ? collect($this->initiative_order)->map(fn ($entry) => [
+                    'characterId' => $entry['character_id'] ?? null,
+                ])->values()->all()
+                : null,
             'currentTurnIndex' => $this->current_turn_index,
             'createdAt'        => $this->created_at->toIso8601String(),
         ];
