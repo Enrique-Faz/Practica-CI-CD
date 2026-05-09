@@ -38,7 +38,6 @@ export class CardActions {
   deleteLabel = input<string>('Borrar');
   horizontal = input<boolean>(false);
   showDelete = input<boolean>(true);
-
   onPrimary = output<void>();
   onDelete = output<void>();
 }

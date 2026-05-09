@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('boards', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('join_code', 8)->unique()->nullable();
             $table->foreignId('dm_id')->constrained('users')->onDelete('cascade');
             $table->string('background_image')->default('tavern.jpg');
             $table->json('initiative_order')->nullable();
