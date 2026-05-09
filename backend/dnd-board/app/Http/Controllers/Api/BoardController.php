@@ -137,12 +137,48 @@ class BoardController extends Controller
             }
         }
 
+        $currentX = $character->pivot->position_x ?? 0;
+        $currentY = $character->pivot->position_y ?? 0;
+        $maxCells = intdiv($character->speed, 5);
+        $distance = max(abs($request->position_x - $currentX), abs($request->position_y - $currentY));
+
+        if ($distance > $maxCells) {
+            return response()->json([
+                'message' => "Movimiento fuera de rango. Máximo: {$maxCells} casillas, distancia: {$distance}."
+            ], 422);
+        }
+
         $board->characters()->updateExistingPivot($character->id, [
             'position_x' => $request->position_x,
             'position_y' => $request->position_y,
         ]);
 
         return response()->json(['message' => 'Posición actualizada correctamente']);
+    }
+
+    public function nextTurn(Board $board)
+    {
+        $user = Auth::user();
+        $isDm = $board->dm_id === $user->id;
+
+        if (is_null($board->initiative_order) || count($board->initiative_order) === 0) {
+            return response()->json(['message' => 'No hay orden de iniciativa configurado.'], 422);
+        }
+
+        if (!$isDm) {
+            $currentIndex = $board->current_turn_index;
+            $currentTurnCharacterId = $board->initiative_order[$currentIndex]['character_id'] ?? null;
+
+            $character = $board->characters()->find($currentTurnCharacterId);
+            if (!$character || $character->user_id !== $user->id) {
+                return response()->json(['message' => 'Solo puedes pasar turno cuando es tu turno.'], 403);
+            }
+        }
+
+        $nextIndex = ($board->current_turn_index + 1) % count($board->initiative_order);
+        $board->update(['current_turn_index' => $nextIndex]);
+
+        return new BoardResource($board->load(['dm', 'characters']));
     }
 
     public function removeCharacter(Board $board, Character $character)

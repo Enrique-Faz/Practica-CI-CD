@@ -20,6 +20,8 @@ class BoardResource extends JsonResource
             'name'             => $this->name,
             'joinCode'         => $this->when($this->dm_id === Auth::id(), $this->join_code),
             'backgroundImage'  => $this->background_image,
+            'gridCols'         => $this->grid_cols,
+            'gridRows'         => $this->grid_rows,
             'dm'               => new UserResource($this->whenLoaded('dm')),
             'characters'       => CharacterResource::collection($this->whenLoaded('characters')),
             'initiativeOrder'  => $this->initiative_order,

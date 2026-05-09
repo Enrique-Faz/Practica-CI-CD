@@ -17,6 +17,8 @@ class Board extends Model
         'dm_id',
         'join_code',
         'background_image',
+        'grid_cols',
+        'grid_rows',
         'initiative_order',
         'current_turn_index'
     ];
