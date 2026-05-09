@@ -1,0 +1,45 @@
+<div
+  class="relative group bg-stone-900/60 border border-amber-900/30 rounded-xl overflow-hidden shadow-lg hover:border-amber-600/50 transition-all"
+>
+  <!-- Background preview -->
+  <div class="h-32 bg-stone-800 flex items-center justify-center">
+    @if (board().backgroundImage) {
+      <img
+        [src]="'backgrounds/' + board().backgroundImage"
+        [alt]="board().name"
+        class="w-full h-full object-cover opacity-60"
+      />
+    } @else {
+      <span class="text-4xl opacity-30">🗺️</span>
+    }
+  </div>
+
+  <!-- Content -->
+  <div class="p-5">
+    <h3 class="text-lg font-black text-stone-100 uppercase tracking-wide">
+      {{ board().name }}
+    </h3>
+    @if (board().dm) {
+      <p class="text-xs text-stone-500 mt-1">
+        DM: {{ board().dm!.firstName }} {{ board().dm!.lastName }}
+      </p>
+    }
+    <p class="text-xs text-stone-600 mt-1">{{ characterCount() }}</p>
+
+    <!-- Actions -->
+    <div class="flex gap-2 mt-4">
+      <a
+        [routerLink]="['/board', board().id]"
+        class="flex-1 py-2 text-center bg-amber-700/30 hover:bg-amber-700/50 text-amber-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
+      >
+        Entrar
+      </a>
+      <button
+        (click)="delete()"
+        class="px-3 py-2 bg-red-900/30 hover:bg-red-900/50 text-red-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
+      >
+        Borrar
+      </button>
+    </div>
+  </div>
+</div>

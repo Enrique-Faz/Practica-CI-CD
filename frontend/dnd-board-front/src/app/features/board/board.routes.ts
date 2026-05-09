@@ -4,7 +4,7 @@ export const BOARD_ROUTES: Routes = [
   {
     path: 'list',
     loadComponent: () =>
-      import('./pages/board-list-page/board-list-page').then((m) => m.BoardListPage),
+      import('./pages/my-boards-page/my-boards-page').then((m) => m.MyBoardsPage),
   },
   {
     path: ':id',

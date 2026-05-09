@@ -1,14 +1,14 @@
 import { Component, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { BoardService } from '../../shared/services/board.service';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { PopupService } from '../../../../shared/services/popup.service';
 import { CreateBoardModal } from '../../components/create-board-modal/create-board-modal';
+import { BoardCard } from '../../components/board-card/board-card';
 
 @Component({
   selector: 'app-my-boards-page',
-  imports: [RouterLink, CreateBoardModal],
+  imports: [CreateBoardModal, BoardCard],
   templateUrl: './my-boards-page.html',
 })
 export class MyBoardsPage {

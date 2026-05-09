@@ -23,7 +23,7 @@ class BoardController extends Controller
             ->orWhereHas('characters', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
-            ->with(['dm'])
+            ->with(['dm', 'characters'])
             ->get();
 
         return BoardResource::collection($boards);
