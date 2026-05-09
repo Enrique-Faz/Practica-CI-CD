@@ -143,4 +143,25 @@ class BoardController extends Controller
 
         return response()->json(['message' => 'Posición actualizada correctamente']);
     }
+
+    public function removeCharacter(Board $board, Character $character)
+    {
+        $user = Auth::user();
+
+        $isAdmin = $user->role === 'admin';
+        $isDm = $board->dm_id === $user->id;
+        $isOwner = $character->user_id === $user->id;
+
+        if (!$isAdmin && !$isDm && !$isOwner) {
+            abort(403, 'No tienes permiso para expulsar este personaje.');
+        }
+
+        if (!$board->characters()->where('character_id', $character->id)->exists()) {
+            return response()->json(['message' => 'El personaje no está en esta partida.'], 404);
+        }
+
+        $board->characters()->detach($character->id);
+
+        return response()->noContent();
+    }
 }

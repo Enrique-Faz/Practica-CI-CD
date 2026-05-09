@@ -1,5 +1,16 @@
-<div class="min-h-screen bg-stone-950 px-4 py-12">
-  <div class="max-w-5xl mx-auto">
+<div
+  class="min-h-screen px-4 py-12 relative"
+  style="
+    background-image: url('/background/my-boards.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  "
+>
+  <!-- Filtro oscurecedor -->
+  <div class="absolute inset-0 bg-stone-950/90 backdrop-blur-[1px] pointer-events-none"></div>
+
+  <div class="relative w-full">
     <!-- Header -->
     <div class="flex items-center justify-between mb-10">
       <div>
@@ -41,9 +52,13 @@
 
     <!-- Board List -->
     @if (!isLoading() && boards().length > 0) {
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="flex flex-col gap-4">
         @for (board of boards(); track board.id) {
-          <app-board-card [board]="board" (onDelete)="confirmDelete($event.id, $event.name)" />
+          <app-board-card
+            [board]="board"
+            (onDelete)="confirmDelete($event.id, $event.name)"
+            (onRemoveCharacter)="removeCharacter($event.boardId, $event.character.id)"
+          />
         }
       </div>
     }

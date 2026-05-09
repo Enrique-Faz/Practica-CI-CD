@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/boards/join', [BoardController::class, 'join']);
     Route::post('/boards/{board}/move', [BoardController::class, 'updateCharacterPosition']);
+    Route::delete('/boards/{board}/characters/{character}', [BoardController::class, 'removeCharacter']);
 
     Route::middleware(['is_admin'])->prefix('admin')->group(function () {
         Route::get('/stats', [AdminController::class, 'stats']);

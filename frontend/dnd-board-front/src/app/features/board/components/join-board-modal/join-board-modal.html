@@ -52,6 +52,15 @@
         }
       </label>
 
+      <!-- Error message -->
+      @if (errorMessage()) {
+        <div
+          class="p-3 bg-red-900/20 border border-red-500/50 rounded-lg text-red-300 text-xs font-bold"
+        >
+          {{ errorMessage() }}
+        </div>
+      }
+
       <!-- Actions -->
       <div class="grid grid-cols-2 gap-4 pt-4">
         <button

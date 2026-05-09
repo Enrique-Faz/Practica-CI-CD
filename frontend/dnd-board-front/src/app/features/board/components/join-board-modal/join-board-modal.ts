@@ -4,6 +4,7 @@ import { ModalService } from '../../../../shared/services/modal.service';
 import { BoardService } from '../../shared/services/board.service';
 import { JoinBoardRequest } from '../../shared/interfaces/join-board-request.interface';
 import { CharacterService } from '../../../characters/shared/services/character.service';
+import { extractApiError } from '../../../../shared/utils/extract-api.error.utils';
 
 @Component({
   selector: 'app-join-board-modal',
@@ -18,6 +19,7 @@ export class JoinBoardModal {
   isJoining = signal(false);
   joinCode = signal('');
   selectedCharacterId = signal<number | null>(null);
+  errorMessage = signal<string | undefined>(undefined);
 
   characters = computed(() => this.#characterService.characters.value() ?? []);
 
@@ -45,13 +47,17 @@ export class JoinBoardModal {
     };
 
     this.isJoining.set(true);
+    this.errorMessage.set(undefined);
     this.#boardService.joinBoard(request).subscribe({
       next: () => {
         this.#boardService.refresh();
         this.#modalService.close(true);
         this.isJoining.set(false);
       },
-      error: () => this.isJoining.set(false),
+      error: (err) => {
+        this.errorMessage.set(extractApiError(err) ?? 'Error al unirse a la partida.');
+        this.isJoining.set(false);
+      },
     });
   }
 

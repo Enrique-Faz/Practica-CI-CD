@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { httpResource } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment';
+import { AuthService } from '../../../../features/auth/shared/services/auth.service';
 import { Character } from '../interfaces/character.interface';
 import { CharacterClass } from '../types/character-class.enum';
 
@@ -26,10 +27,12 @@ export interface CreateCharacterRequest {
 })
 export class CharacterService {
   readonly #http = inject(HttpClient);
+  readonly #auth = inject(AuthService);
 
   #refreshTrigger = signal(0);
 
   characters = httpResource<Character[]>(() => {
+    this.#auth.currentUser()?.user.id;
     this.#refreshTrigger();
     return { url: `${API}/characters` };
   });

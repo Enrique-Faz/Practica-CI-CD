@@ -57,18 +57,5 @@
   <div class="w-px mx-6 self-stretch bg-amber-900/30 shrink-0"></div>
 
   <!-- Sección 3: Botones -->
-  <div class="flex flex-col gap-3 w-36 shrink-0 ml-4">
-    <button
-      (click)="edit()"
-      class="w-full px-4 py-3 bg-amber-700/30 hover:bg-amber-700/50 text-amber-400 text-sm font-bold rounded-lg uppercase tracking-wide transition-colors"
-    >
-      Editar
-    </button>
-    <button
-      (click)="delete()"
-      class="w-full px-4 py-3 bg-red-900/30 hover:bg-red-900/50 text-red-400 text-sm font-bold rounded-lg uppercase tracking-wide transition-colors"
-    >
-      Borrar
-    </button>
-  </div>
+  <app-card-actions primaryLabel="Editar" (onPrimary)="edit()" (onDelete)="delete()" />
 </div>

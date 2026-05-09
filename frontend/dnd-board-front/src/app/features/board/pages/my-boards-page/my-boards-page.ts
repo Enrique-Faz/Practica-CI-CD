@@ -46,4 +46,10 @@ export class MyBoardsPage {
         }
       });
   }
+
+  removeCharacter(boardId: number, characterId: number): void {
+    this.#boardService.removeCharacter(boardId, characterId).subscribe({
+      complete: () => this.#boardService.refresh(),
+    });
+  }
 }

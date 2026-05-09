@@ -1,61 +1,87 @@
 <div
-  class="relative group bg-stone-900/60 border border-amber-900/30 rounded-xl overflow-hidden shadow-lg hover:border-amber-600/50 transition-all"
+  class="group flex w-full min-h-[560px] bg-stone-900/60 border border-amber-900/30 rounded-2xl overflow-hidden shadow-xl hover:border-amber-600/50 hover:shadow-amber-900/20 transition-all duration-300"
 >
-  <!-- Background preview -->
-  <div class="h-32 bg-stone-800 flex items-center justify-center">
+  <!-- Background thumbnail -->
+  <div class="relative w-[30rem] shrink-0 bg-stone-800">
     @if (board().backgroundImage) {
       <img
         [src]="'/mapas/' + board().backgroundImage"
         [alt]="board().name"
-        class="w-full h-full object-cover opacity-60"
+        class="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity duration-300"
       />
     } @else {
-      <span class="text-4xl opacity-30">🗺️</span>
+      <span class="absolute inset-0 flex items-center justify-center text-5xl opacity-20">🗺️</span>
     }
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 bg-gradient-to-r from-transparent to-stone-900/60"></div>
   </div>
 
-  <!-- Content -->
-  <div class="p-5">
-    <h3 class="text-lg font-black text-stone-100 uppercase tracking-wide">
-      {{ board().name }}
-    </h3>
-    @if (board().dm) {
-      <p class="text-xs text-stone-500 mt-1">
-        DM: {{ board().dm!.firstName }} {{ board().dm!.lastName }}
-      </p>
-    }
-    <p class="text-xs text-stone-600 mt-1">{{ characterCount() }}</p>
-
-    @if (board().joinCode) {
-      <div class="mt-2 flex items-center gap-2">
-        <span class="text-xs text-stone-500 uppercase font-bold tracking-wider">Código:</span>
-        <span class="text-xs font-black text-amber-400 tracking-widest">{{
-          board().joinCode
-        }}</span>
-        <button
-          (click)="copyCode()"
-          title="Copiar código"
-          class="text-stone-500 hover:text-amber-400 transition-colors text-xs leading-none"
-        >
-          📋
-        </button>
+  <!-- Main content -->
+  <div class="flex flex-1 gap-6 px-6 py-6 min-w-0">
+    <!-- Name + DM + code + actions (columna izquierda) -->
+    <div class="flex flex-col justify-between w-80 shrink-0">
+      <div>
+        <h3 class="text-xl font-black text-stone-100 uppercase tracking-wide">
+          {{ board().name }}
+        </h3>
+        @if (board().dm) {
+          <p class="text-sm text-stone-400 mt-1">
+            <span class="text-amber-600 font-bold">DM:</span>
+            {{ board().dm!.firstName }} {{ board().dm!.lastName }}
+          </p>
+        }
       </div>
-    }
 
-    <!-- Actions -->
-    <div class="flex gap-2 mt-4">
-      <a
-        [routerLink]="['/board', board().id]"
-        class="flex-1 py-2 text-center bg-amber-700/30 hover:bg-amber-700/50 text-amber-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
-      >
-        Entrar
-      </a>
-      <button
-        (click)="delete()"
-        class="px-3 py-2 bg-red-900/30 hover:bg-red-900/50 text-red-400 text-xs font-bold rounded-lg uppercase tracking-wide transition-colors"
-      >
-        Borrar
-      </button>
+      @if (board().joinCode) {
+        <div class="flex flex-col gap-1">
+          <span class="text-xs text-stone-500 uppercase font-bold tracking-wider"
+            >Código de unión</span
+          >
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-black text-amber-400 tracking-widest">{{
+              board().joinCode
+            }}</span>
+            <button
+              (click)="copyCode()"
+              title="Copiar código"
+              class="cursor-copy text-stone-500 hover:text-amber-400 transition-colors text-base"
+            >
+              📋
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- Actions -->
+      <app-card-actions
+        primaryLabel="⚔️ Entrar"
+        [primaryLink]="['/board', board().id]"
+        [horizontal]="true"
+        (onDelete)="delete()"
+      />
+    </div>
+
+    <!-- Divider -->
+    <div class="w-px self-stretch bg-stone-700/50 shrink-0"></div>
+
+    <!-- Participants (columna derecha, scroll si hacen falta) -->
+    <div class="flex-1 min-w-0 flex flex-col">
+      <p class="text-xs text-stone-500 uppercase font-bold tracking-wider mb-3">
+        Participantes ({{ board().characters.length }})
+      </p>
+      @if (board().characters.length) {
+        <ul class="flex flex-col gap-2">
+          @for (character of board().characters; track character.id) {
+            <app-board-participant-card
+              [character]="character"
+              [canRemove]="canRemoveCharacter(character)"
+              (onRemove)="removeCharacter($event)"
+            />
+          }
+        </ul>
+      } @else {
+        <p class="text-xs text-stone-600 italic">Sin participantes aún</p>
+      }
     </div>
   </div>
 </div>

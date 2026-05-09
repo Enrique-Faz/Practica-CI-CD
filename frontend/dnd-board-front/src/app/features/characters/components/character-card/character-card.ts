@@ -1,9 +1,11 @@
 import { Component, computed, input, output } from '@angular/core';
 
+import { CardActions } from '../../../../shared/components/card-actions/card-actions';
 import { Character } from '../../shared/interfaces/character.interface';
 
 @Component({
   selector: 'app-character-card',
+  imports: [CardActions],
   templateUrl: './character-card.html',
 })
 export class CharacterCard {
