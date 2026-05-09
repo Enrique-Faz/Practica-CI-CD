@@ -3,6 +3,7 @@ import { FormField, form, required, maxLength } from '@angular/forms/signals';
 
 import { ModalService } from '../../../../shared/services/modal.service';
 import { BoardService, CreateBoardRequest } from '../../shared/services/board.service';
+import { BoardMap } from '../../shared/types/board-map.enum';
 
 @Component({
   selector: 'app-create-board-modal',
@@ -17,7 +18,7 @@ export class CreateBoardModal {
 
   boardModel = signal<CreateBoardRequest>({
     name: '',
-    backgroundImage: 'forest.jpg',
+    backgroundImage: BoardMap.Cueva,
   });
 
   boardForm = form(this.boardModel, (path) => {
@@ -26,12 +27,7 @@ export class CreateBoardModal {
     required(path.backgroundImage, { message: 'El fondo es obligatorio' });
   });
 
-  backgrounds = [
-    { value: 'forest.jpg', label: 'Bosque' },
-    { value: 'dungeon.jpg', label: 'Mazmorra' },
-    { value: 'tavern.jpg', label: 'Taberna' },
-    { value: 'cave.jpg', label: 'Cueva' },
-  ];
+  backgrounds = Object.entries(BoardMap).map(([label, value]) => ({ value, label }));
 
   submit(): void {
     if (this.boardForm().valid()) {

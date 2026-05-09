@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class BoardResource extends JsonResource
 {
@@ -15,14 +16,15 @@ class BoardResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'backgroundImage' => $this->background_image,
-            'dm' => new UserResource($this->whenLoaded('dm')),
-            'characters' => CharacterResource::collection($this->whenLoaded('characters')),
-            'initiativeOrder' => $this->initiative_order,
+            'id'               => $this->id,
+            'name'             => $this->name,
+            'joinCode'         => $this->when($this->dm_id === Auth::id(), $this->join_code),
+            'backgroundImage'  => $this->background_image,
+            'dm'               => new UserResource($this->whenLoaded('dm')),
+            'characters'       => CharacterResource::collection($this->whenLoaded('characters')),
+            'initiativeOrder'  => $this->initiative_order,
             'currentTurnIndex' => $this->current_turn_index,
-            'createdAt' => $this->created_at->toIso8601String(),
+            'createdAt'        => $this->created_at->toIso8601String(),
         ];
     }
 }

@@ -1,7 +1,9 @@
 <div
   class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-md"
 >
-  <div class="w-full max-w-md bg-stone-900 border border-amber-900/40 rounded-2xl p-8 shadow-2xl shadow-black/50">
+  <div
+    class="w-full max-w-md bg-stone-900 border border-amber-900/40 rounded-2xl p-8 shadow-2xl shadow-black/50"
+  >
     <!-- Header -->
     <div class="text-center mb-8">
       <h3 class="text-2xl font-black text-amber-400 uppercase tracking-wider">Nueva Partida</h3>
@@ -27,7 +29,9 @@
 
       <!-- Background Selection -->
       <div class="block">
-        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1">Fondo del tablero</span>
+        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1"
+          >Fondo del tablero</span
+        >
         <div class="grid grid-cols-2 gap-3 mt-2">
           @for (bg of backgrounds; track bg.value) {
             <button

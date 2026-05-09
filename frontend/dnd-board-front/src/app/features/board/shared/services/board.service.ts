@@ -10,7 +10,7 @@ const API = environment.apiEndpoint;
 
 export interface CreateBoardRequest {
   name: string;
-  background_image: BoardMap;
+  backgroundImage: BoardMap;
 }
 
 @Injectable({

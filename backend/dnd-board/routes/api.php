@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('boards', BoardController::class);
 
+    Route::post('/boards/join', [BoardController::class, 'join']);
     Route::post('/boards/{board}/move', [BoardController::class, 'updateCharacterPosition']);
 
     Route::middleware(['is_admin'])->prefix('admin')->group(function () {

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBoardRequest;
 use App\Http\Requests\UpdateBoardRequest;
 use App\Http\Resources\BoardResource;
 use App\Models\Board;
+use App\Models\Character;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -70,6 +71,30 @@ class BoardController extends Controller
         }
         $board->delete();
         return response()->noContent();
+    }
+
+    public function join(Request $request)
+    {
+        $request->validate([
+            'joinCode'    => 'required|string',
+            'characterId' => 'required|integer|exists:characters,id',
+        ]);
+
+        $board = Board::where('join_code', $request->join_code)->firstOrFail();
+
+        $character = Character::where('id', $request->character_id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
+
+        if ($board->characters()->where('character_id', $character->id)->exists()) {
+            return response()->json(['message' => 'El personaje ya está en esta partida.'], 409);
+        }
+
+        $board->characters()->attach($character->id);
+
+        return (new BoardResource($board->load(['dm', 'characters'])))
+            ->response()
+            ->setStatusCode(200);
     }
 
     /* -------------------------------------------------------------------------- */
