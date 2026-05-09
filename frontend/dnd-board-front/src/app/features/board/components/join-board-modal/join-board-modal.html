@@ -1,0 +1,79 @@
+<div
+  class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-stone-950/70 backdrop-blur-md"
+>
+  <div
+    class="w-full max-w-md bg-stone-900 border border-amber-900/40 rounded-2xl p-8 shadow-2xl shadow-black/50"
+  >
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h3 class="text-2xl font-black text-amber-400 uppercase tracking-wider">Unirse a Partida</h3>
+      <p class="text-stone-400 text-sm mt-2">
+        Introduce el código que te ha dado el Dungeon Master
+      </p>
+    </div>
+
+    <div class="space-y-5">
+      <!-- Código -->
+      <label class="block">
+        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1"
+          >Código de partida</span
+        >
+        <input
+          type="text"
+          [value]="joinCode()"
+          (input)="onCodeInput($event)"
+          placeholder="XXXXXX"
+          maxlength="8"
+          class="mt-1 w-full px-4 py-3 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 placeholder-stone-600 uppercase tracking-widest text-center font-black text-lg focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
+        />
+      </label>
+
+      <!-- Seleccionar personaje -->
+      <label class="block">
+        <span class="text-xs font-bold uppercase text-stone-300 tracking-wider ml-1"
+          >Tu personaje</span
+        >
+        @if (characters().length === 0) {
+          <p class="mt-2 text-xs text-red-400 font-bold">
+            No tienes personajes disponibles. Crea uno primero.
+          </p>
+        } @else {
+          <select
+            (change)="onCharacterSelect($event)"
+            class="mt-1 w-full px-4 py-3 bg-stone-800/50 border border-amber-900/30 rounded-lg text-stone-200 focus:outline-none focus:border-amber-600 focus:ring-1 focus:ring-amber-600/50 transition-all"
+          >
+            <option value="" class="bg-stone-900">-- Selecciona un personaje --</option>
+            @for (character of characters(); track character.id) {
+              <option [value]="character.id" class="bg-stone-900 capitalize">
+                {{ character.name }} ({{ character.class }})
+              </option>
+            }
+          </select>
+        }
+      </label>
+
+      <!-- Actions -->
+      <div class="grid grid-cols-2 gap-4 pt-4">
+        <button
+          type="button"
+          (click)="dismiss()"
+          class="w-full py-3 bg-stone-800 border border-stone-700 text-stone-300 hover:bg-stone-700 hover:text-stone-100 font-bold rounded-lg transition-all uppercase tracking-widest text-xs"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          (click)="submit()"
+          [disabled]="!canSubmit() || isJoining()"
+          class="w-full py-3 bg-amber-600 hover:bg-amber-500 disabled:bg-stone-700 disabled:cursor-not-allowed text-stone-900 font-black rounded-lg shadow-lg shadow-amber-900/30 transition-all uppercase tracking-wide text-xs active:scale-95"
+        >
+          @if (isJoining()) {
+            <span class="animate-pulse">Uniéndose...</span>
+          } @else {
+            Unirse
+          }
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

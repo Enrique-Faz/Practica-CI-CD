@@ -5,6 +5,7 @@ import { BoardMap } from '../types/board-map.enum';
 export interface Board {
   id: number;
   name: string;
+  joinCode?: string;
   backgroundImage?: BoardMap;
   dm?: User;
   characters: Character[];

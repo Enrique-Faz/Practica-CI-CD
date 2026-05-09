@@ -5,6 +5,7 @@ import { httpResource } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 import { Board } from '../interfaces/board.interface';
 import { BoardMap } from '../types/board-map.enum';
+import { JoinBoardRequest } from '../interfaces/join-board-request.interface';
 
 const API = environment.apiEndpoint;
 
@@ -28,6 +29,10 @@ export class BoardService {
 
   createBoard(data: CreateBoardRequest) {
     return this.#http.post<{ data: Board }>(`${API}/boards`, data);
+  }
+
+  joinBoard(data: JoinBoardRequest) {
+    return this.#http.post<{ data: Board }>(`${API}/boards/join`, data);
   }
 
   deleteBoard(id: number) {

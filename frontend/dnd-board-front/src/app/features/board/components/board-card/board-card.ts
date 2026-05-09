@@ -20,4 +20,9 @@ export class BoardCard {
   delete(): void {
     this.onDelete.emit(this.board());
   }
+
+  copyCode(): void {
+    const code = this.board().joinCode;
+    if (code) navigator.clipboard.writeText(code);
+  }
 }

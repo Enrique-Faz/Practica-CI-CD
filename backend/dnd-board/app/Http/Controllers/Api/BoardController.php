@@ -76,8 +76,8 @@ class BoardController extends Controller
     public function join(Request $request)
     {
         $request->validate([
-            'joinCode'    => 'required|string',
-            'characterId' => 'required|integer|exists:characters,id',
+            'join_code'    => 'required|string',
+            'character_id' => 'required|integer|exists:characters,id',
         ]);
 
         $board = Board::where('join_code', $request->join_code)->firstOrFail();

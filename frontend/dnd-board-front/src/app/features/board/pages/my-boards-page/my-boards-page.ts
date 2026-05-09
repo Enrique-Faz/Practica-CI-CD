@@ -4,11 +4,12 @@ import { BoardService } from '../../shared/services/board.service';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { PopupService } from '../../../../shared/services/popup.service';
 import { CreateBoardModal } from '../../components/create-board-modal/create-board-modal';
+import { JoinBoardModal } from '../../components/join-board-modal/join-board-modal';
 import { BoardCard } from '../../components/board-card/board-card';
 
 @Component({
   selector: 'app-my-boards-page',
-  imports: [CreateBoardModal, BoardCard],
+  imports: [CreateBoardModal, JoinBoardModal, BoardCard],
   templateUrl: './my-boards-page.html',
 })
 export class MyBoardsPage {
@@ -19,9 +20,14 @@ export class MyBoardsPage {
   boards = computed(() => this.#boardService.boards.value() ?? []);
   isLoading = computed(() => this.#boardService.boards.isLoading());
   showCreateModal = computed(() => this.#modalService.activeModal() === 'create-board');
+  showJoinModal = computed(() => this.#modalService.activeModal() === 'join-board');
 
   openCreateModal(): void {
     this.#modalService.open('create-board');
+  }
+
+  openJoinModal(): void {
+    this.#modalService.open('join-board');
   }
 
   confirmDelete(boardId: number, boardName: string): void {

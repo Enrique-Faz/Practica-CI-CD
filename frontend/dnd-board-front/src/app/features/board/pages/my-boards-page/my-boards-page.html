@@ -6,12 +6,20 @@
         <h1 class="text-3xl font-black text-amber-400 uppercase tracking-wider">Mis Partidas</h1>
         <p class="text-stone-400 text-sm mt-1">Tableros de batalla donde participas</p>
       </div>
-      <button
-        (click)="openCreateModal()"
-        class="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-stone-900 font-bold rounded-lg transition-all uppercase text-sm tracking-wide shadow-lg shadow-amber-900/30 active:scale-95"
-      >
-        + Nueva Partida
-      </button>
+      <div class="flex gap-3">
+        <button
+          (click)="openJoinModal()"
+          class="px-6 py-3 bg-stone-700 hover:bg-stone-600 text-stone-200 font-bold rounded-lg transition-all uppercase text-sm tracking-wide active:scale-95"
+        >
+          Unirse a partida
+        </button>
+        <button
+          (click)="openCreateModal()"
+          class="px-6 py-3 bg-amber-600 hover:bg-amber-500 text-stone-900 font-bold rounded-lg transition-all uppercase text-sm tracking-wide shadow-lg shadow-amber-900/30 active:scale-95"
+        >
+          + Nueva Partida
+        </button>
+      </div>
     </div>
 
     <!-- Loading -->
@@ -45,4 +53,9 @@
 <!-- Create Board Modal -->
 @if (showCreateModal()) {
   <app-create-board-modal />
+}
+
+<!-- Join Board Modal -->
+@if (showJoinModal()) {
+  <app-join-board-modal />
 }
