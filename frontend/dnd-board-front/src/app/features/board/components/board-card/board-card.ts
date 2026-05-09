@@ -27,6 +27,10 @@ export class BoardCard {
     return this.#boardService.canRemoveCharacter(this.board(), character);
   }
 
+  canDeleteBoard(): boolean {
+    return this.#boardService.canDeleteBoard(this.board());
+  }
+
   delete(): void {
     this.onDelete.emit(this.board());
   }

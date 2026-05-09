@@ -66,8 +66,9 @@ class BoardController extends Controller
      */
     public function destroy(Board $board)
     {
-        if ($board->dm_id !== Auth::id()) {
-            abort(403, 'Solo el Dungeon Master puede borrar la partida.');
+        $user = Auth::user();
+        if ($board->dm_id !== $user->id && $user->role !== 'admin') {
+            abort(403, 'Solo el Dungeon Master o un administrador puede borrar la partida.');
         }
         $board->delete();
         return response()->noContent();

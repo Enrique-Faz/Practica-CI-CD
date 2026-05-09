@@ -21,12 +21,14 @@ import { RouterLink } from '@angular/router';
           {{ primaryLabel() }}
         </button>
       }
-      <button
-        (click)="onDelete.emit()"
-        class="w-full px-4 py-3 bg-red-900/30 hover:bg-red-900/50 text-red-400 text-sm font-bold rounded-lg uppercase tracking-wide transition-colors"
-      >
-        {{ deleteLabel() }}
-      </button>
+      @if (showDelete()) {
+        <button
+          (click)="onDelete.emit()"
+          class="w-full px-4 py-3 bg-red-900/30 hover:bg-red-900/50 text-red-400 text-sm font-bold rounded-lg uppercase tracking-wide transition-colors"
+        >
+          {{ deleteLabel() }}
+        </button>
+      }
     </div>
   `,
 })
@@ -35,6 +37,7 @@ export class CardActions {
   primaryLink = input<unknown[] | null>(null);
   deleteLabel = input<string>('Borrar');
   horizontal = input<boolean>(false);
+  showDelete = input<boolean>(true);
 
   onPrimary = output<void>();
   onDelete = output<void>();

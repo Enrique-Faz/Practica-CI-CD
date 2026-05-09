@@ -37,6 +37,12 @@ export class BoardService {
     return user.role === 'admin' || board.dm?.id === user.id || character.userId === user.id;
   }
 
+  canDeleteBoard(board: Board): boolean {
+    const user = this.#auth.currentUser()?.user;
+    if (!user) return false;
+    return user.role === 'admin' || board.dm?.id === user.id;
+  }
+
   createBoard(data: CreateBoardRequest) {
     return this.#http.post<{ data: Board }>(`${API}/boards`, data);
   }
