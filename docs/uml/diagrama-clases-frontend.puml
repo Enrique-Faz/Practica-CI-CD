@@ -1,0 +1,474 @@
+@startuml diagrama-clases-frontend
+
+title Diagrama de Clases — D&D Board (Frontend Angular)
+
+' ===== ENUMS & INTERFACES =====
+
+package "Tipos" {
+  enum CharacterClass {
+    Barbaro
+    Bardo
+    Clerigo
+    Druida
+    Explorador
+    Guerrero
+    Hechicero
+    Mago
+    Monje
+    Paladin
+    Picaro
+  }
+
+  enum BoardMap {
+    Cueva = 'cueva.webp'
+    Entrada = 'entrada.jpeg'
+    Mansion = 'mansion.webp'
+  }
+
+  interface User {
+    +number id
+    +string firstName
+    +string lastName
+    +string email
+    +'normal' | 'admin' role
+    +boolean google2fa_enabled
+  }
+
+  interface LoggedUser {
+    +string token
+    +User user
+    +string expiresAt
+  }
+
+  interface Board {
+    +number id
+    +string name
+    +string joinCode
+    +BoardMap backgroundImage
+    +number gridCols
+    +number gridRows
+    +User dm
+    +Character[] characters
+    +InitiativeEntry[] initiativeOrder
+    +number currentTurnIndex
+    +string createdAt
+  }
+
+  interface Character {
+    +number id
+    +number userId
+    +string name
+    +CharacterClass class
+    +number hp
+    +number speed
+    +CharacterStats stats
+    +CharacterPosition position
+  }
+
+  interface CharacterStats {
+    +number strength
+    +number dexterity
+    +number constitution
+    +number intelligence
+    +number wisdom
+    +number charisma
+  }
+
+  interface CharacterPosition {
+    +number x
+    +number y
+  }
+
+  interface GridCell {
+    +number col
+    +number row
+  }
+
+  interface AdminStats {
+    +number total_users
+    +number total_boards
+    +ChartEntry[] chart_data
+  }
+
+  interface AdminUser {
+    +number id
+    +string firstName
+    +string lastName
+    +string email
+    +string role
+    +boolean google2fa_enabled
+  }
+
+  interface AdminBoard {
+    +number id
+    +string name
+    +string mapUrl
+    +string createdAt
+  }
+
+  interface PopupData {
+    +string title
+    +string message
+    +string confirmText
+    +string cancelText
+  }
+}
+
+' ===== SERVICES =====
+
+package "Services" {
+  class AuthService <<Service>> {
+    -Signal<LoggedUser> currentUser
+    +Computed<boolean> isLoggedIn
+    +Computed<boolean> isAdmin
+    +login(loginSignal) : HttpResourceRef
+    +register(registerSignal) : HttpResourceRef
+    +verify2fa(codeSignal) : HttpResourceRef
+    +logout() : void
+    +refreshCurrentUser() : void
+  }
+
+  class BoardService <<Service>> {
+    +HttpResource<Board[]> boards
+    +getBoardResource(boardId) : HttpResource<Board>
+    +canRemoveCharacter(board, character) : boolean
+    +canDeleteBoard(board) : boolean
+    +canMoveCharacter(board, character) : boolean
+    +getReachableCells(character, board) : GridCell[]
+    +createBoard(data) : Observable<Board>
+    +joinBoard(data) : Observable<Board>
+    +deleteBoard(id) : Observable
+    +moveCharacter(boardId, data) : Observable
+    +nextTurn(boardId) : Observable<Board>
+    +updateInitiativeOrder(boardId, ids) : Observable<Board>
+  }
+
+  class CharacterService <<Service>> {
+    +HttpResource<Character[]> characters
+    +createCharacter(data) : Observable<Character>
+    +updateCharacter(id, data) : Observable<Character>
+    +deleteCharacter(id) : Observable
+    +refresh() : void
+  }
+
+  class AdminService <<Service>> {
+    +HttpResource<AdminStats> statsResource
+    +loadUsers() : HttpResourceRef<AdminUser[]>
+    +loadBoards() : HttpResourceRef<AdminBoard[]>
+    +deleteUser(idSignal) : HttpResourceRef
+    +deleteBoard(idSignal) : HttpResourceRef
+  }
+
+  class ProfileService <<Service>> {
+    +HttpResource<User> userProfile
+  }
+
+  class ModalService <<Service>> {
+    +Signal<string> activeModal
+    +Signal<unknown> modalData
+    +open(modalId, data) : Observable
+    +close(result) : void
+    +dismiss() : void
+  }
+
+  class PopupService <<Service>> {
+    +Signal<boolean> isOpen
+    +Signal<PopupData> data
+    +ask(popupData) : Observable<boolean>
+    +close(response) : void
+  }
+}
+
+' ===== GUARDS & INTERCEPTOR =====
+
+package "Core" {
+  class authGuard <<Guard>> {
+    +canActivate() : boolean
+  }
+
+  class guestGuard <<Guard>> {
+    +canActivate() : boolean
+  }
+
+  class adminGuard <<Guard>> {
+    +canActivate() : boolean
+  }
+
+  class preventUnsavedGuard <<Guard>> {
+    +canDeactivate(component) : boolean
+  }
+
+  class authInterceptor <<Interceptor>> {
+    +intercept(req, next) : Observable
+  }
+}
+
+' ===== PAGES =====
+
+package "Pages" {
+  class LoginPage <<Page>> {
+    +HttpResourceRef loginResource
+    +HttpResourceRef verify2faResource
+    +Computed<boolean> isLoading
+    +Computed<boolean> show2FA
+    +handleLogin(credentials) : void
+    +handleVerify2FA(code) : void
+    +redirectToGoogle() : void
+  }
+
+  class RegisterPage <<Page>> {
+    +HttpResourceRef registerResource
+    +Computed<boolean> isLoading
+    +handleRegister(credentials) : void
+    +hasUnsavedChanges() : boolean
+  }
+
+  class DashboardPage <<Page>> {
+  }
+
+  class MyBoardsPage <<Page>> {
+    +Computed<Board[]> boards
+    +openCreateModal() : void
+    +openJoinModal() : void
+    +confirmDelete(boardId, boardName) : void
+  }
+
+  class BoardPage <<Page>> {
+    +HttpResource<Board> boardResource
+    +Signal<Character> selectedCharacter
+    +Signal<number> zoom
+    +Computed<boolean> isDm
+    +Computed<GridCell[]> reachableCells
+    +onTokenClicked(character) : void
+    +onCellClicked(cell) : void
+    +onNextTurn() : void
+    +onGridSaved(config) : void
+  }
+
+  class MyCharactersPage <<Page>> {
+    +Computed<Character[]> characters
+    +openCreateModal() : void
+    +openEditModal(character) : void
+    +confirmDelete(id, name) : void
+  }
+
+  class ProfilePage <<Page>> {
+    +HttpResource<User> userProfile
+    +prepare2fa() : void
+  }
+
+  class StatsPage <<Page>> {
+    +HttpResource<AdminStats> stats
+  }
+
+  class ManagePage <<Page>> {
+    +HttpResourceRef usersResource
+    +HttpResourceRef boardsResource
+    +handleDeleteUser(event) : void
+    +handleDeleteBoard(event) : void
+  }
+}
+
+' ===== COMPONENTS =====
+
+package "Components" {
+  class Login <<Component>> {
+    +input Signal<string> errorMessage
+    +input Signal<boolean> isLoading
+    +output EventEmitter<LoginRequest> loginOutput
+    +output EventEmitter googleClick
+    +submit() : void
+  }
+
+  class Register <<Component>> {
+    +input Signal<string> errorMessage
+    +input Signal<boolean> isLoading
+    +output EventEmitter<RegisterRequest> registerOutput
+    +submit() : void
+  }
+
+  class BoardCard <<Component>> {
+    +input Board board
+    +output EventEmitter<Board> onDelete
+    +output EventEmitter onRemoveCharacter
+    +copyCode() : void
+  }
+
+  class BoardGrid <<Component>> {
+    +input Board board
+    +input GridCell[] reachableCells
+    +input Character selectedCharacter
+    +input number zoom
+    +output EventEmitter<Character> tokenClicked
+    +output EventEmitter<GridCell> cellClicked
+    +output EventEmitter panChanged
+    +Computed<GridCell[]> cells
+    +isReachable(cell) : boolean
+    +characterAt(cell) : Character
+  }
+
+  class BoardToken <<Component>> {
+    +input Character character
+    +input boolean isSelected
+    +input boolean isCurrentTurn
+    +Computed<string> classImage
+  }
+
+  class CharacterSheet <<Component>> {
+    +input Character character
+    +Computed<string> classImage
+    +Computed<object[]> stats
+  }
+
+  class InitiativePanel <<Component>> {
+    +input Board board
+    +input boolean canAdvanceTurn
+    +input boolean canEditInitiative
+    +output EventEmitter nextTurn
+    +output EventEmitter<number[]> orderChanged
+    +Signal<boolean> editMode
+    +startCombat() : void
+    +moveUp(index) : void
+    +moveDown(index) : void
+    +saveEdit() : void
+  }
+
+  class SideNavPanel <<Component>> {
+    +input Board board
+    +input Character playerCharacter
+    +input boolean canAdvanceTurn
+    +output EventEmitter nextTurn
+    +output EventEmitter<number[]> orderChanged
+    +Signal<string> activeTab
+  }
+
+  class DiceRoller <<Component>> {
+    +Signal<number> selectedDie
+    +Signal<DiceRollEntry[]> history
+    +roll() : void
+  }
+
+  class GridConfigPanel <<Component>> {
+    +input Board board
+    +output EventEmitter onGridSaved
+    +output EventEmitter previewChanged
+    +Signal<number> cols
+    +Signal<number> rows
+    +save() : void
+  }
+
+  class CharacterCard <<Component>> {
+    +input Character character
+    +output EventEmitter<Character> onEdit
+    +output EventEmitter<Character> onDelete
+    +Computed<string> classImage
+    +Computed<object[]> stats
+  }
+
+  class CharacterFormModal <<Component>> {
+    +Signal<boolean> isSaving
+    +Computed<boolean> isEditing
+    +submit() : void
+    +dismiss() : void
+  }
+
+  class CreateBoardModal <<Component>> {
+    +Signal<boolean> isSaving
+    +submit() : void
+    +dismiss() : void
+  }
+
+  class JoinBoardModal <<Component>> {
+    +Signal<string> joinCode
+    +Signal<number> selectedCharacterId
+    +Computed<boolean> canSubmit
+    +submit() : void
+    +dismiss() : void
+  }
+
+  class TwoFaModal <<Component>> {
+    +HttpResource setupResource
+    +confirm(code) : void
+    +dismiss() : void
+  }
+
+  class ConfirmPopup <<Component>> {
+    +Computed<PopupData> data
+    +confirm() : void
+    +cancel() : void
+  }
+
+  class UsersTable <<Component>> {
+    +input AdminUser[] users
+    +output EventEmitter delete
+  }
+
+  class BoardsTable <<Component>> {
+    +input AdminBoard[] boards
+    +output EventEmitter delete
+  }
+
+  class BoardsChart <<Component>> {
+    +input ChartEntry[] chartData
+  }
+}
+
+' ===== RELACIONES =====
+
+' Tipos internos
+Character --> CharacterStats
+Character --> CharacterPosition
+Character ..> CharacterClass
+Board ..> BoardMap
+
+' Servicios con tipos de dominio
+AuthService --> LoggedUser
+BoardService --> Board
+BoardService --> GridCell
+CharacterService --> Character
+AdminService --> AdminStats
+ProfileService --> User
+PopupService --> PopupData
+
+' Core con services
+authGuard ..> AuthService
+guestGuard ..> AuthService
+adminGuard ..> AuthService
+authInterceptor ..> AuthService
+
+' Pages con services (relaciones arquitectónicamente relevantes)
+LoginPage --> AuthService
+RegisterPage --> AuthService
+MyBoardsPage --> BoardService
+MyBoardsPage --> ModalService
+MyBoardsPage --> PopupService
+BoardPage --> BoardService
+BoardPage --> AuthService
+MyCharactersPage --> CharacterService
+MyCharactersPage --> ModalService
+MyCharactersPage --> PopupService
+ProfilePage --> ProfileService
+ProfilePage --> ModalService
+StatsPage --> AdminService
+ManagePage --> AdminService
+ManagePage --> PopupService
+
+' Componentes con services (solo los que inyectan directamente)
+CharacterFormModal --> CharacterService
+CharacterFormModal --> ModalService
+CreateBoardModal --> BoardService
+CreateBoardModal --> ModalService
+JoinBoardModal --> BoardService
+JoinBoardModal --> CharacterService
+JoinBoardModal --> ModalService
+TwoFaModal --> ModalService
+ConfirmPopup --> PopupService
+BoardCard --> BoardService
+
+' Composición de componentes
+SideNavPanel --> InitiativePanel
+SideNavPanel --> CharacterSheet
+SideNavPanel --> DiceRoller
+BoardGrid --> BoardToken
+
+@enduml

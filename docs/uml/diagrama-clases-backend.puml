@@ -1,0 +1,203 @@
+@startuml diagrama-clases-backend
+
+title Diagrama de Clases — D&D Board (Backend Laravel)
+
+' ===== ENUMS =====
+
+package "Enums" {
+  enum Role {
+    admin
+    normal
+  }
+
+  enum CharacterClass {
+    guerrero
+    mago
+    picaro
+    clerigo
+    paladin
+    explorador
+    bardo
+    druida
+    barbaro
+    monje
+    hechicero
+  }
+
+  enum BoardMap {
+    cueva.webp
+    entrada.jpeg
+    mansion.webp
+  }
+}
+
+' ===== MODELS =====
+
+package "Models" {
+  class User {
+    -bigint id
+    -string first_name
+    -string last_name
+    -string email
+    -string password
+    -Role role
+    -text google2fa_secret
+    -datetime email_verified_at
+    +characters() : HasMany<Character>
+    +dmBoards() : HasMany<Board>
+  }
+
+  class Board {
+    -bigint id
+    -string name
+    -bigint dm_id
+    -string join_code
+    -string background_image
+    -int grid_cols
+    -int grid_rows
+    -json initiative_order
+    -int current_turn_index
+    +dm() : BelongsTo<User>
+    +characters() : BelongsToMany<Character>
+    +boot() : void
+  }
+
+  class Character {
+    -bigint id
+    -bigint user_id
+    -string name
+    -CharacterClass class
+    -int hp
+    -int speed
+    -int strength
+    -int dexterity
+    -int constitution
+    -int intelligence
+    -int wisdom
+    -int charisma
+    +user() : BelongsTo<User>
+    +boards() : BelongsToMany<Board>
+  }
+
+  class BoardCharacter <<pivot>> {
+    -bigint id
+    -bigint board_id
+    -bigint character_id
+    -int position_x
+    -int position_y
+  }
+}
+
+' ===== RESOURCES =====
+
+package "Resources" {
+  class UserResource <<Resource>> {
+    +int id
+    +string firstName
+    +string lastName
+    +string email
+    +string role
+    +boolean google2fa_enabled
+  }
+
+  class CharacterResource <<Resource>> {
+    +int id
+    +int userId
+    +string name
+    +string class
+    +int hp
+    +int speed
+    +object stats
+    +object position
+  }
+
+  class BoardResource <<Resource>> {
+    +int id
+    +string name
+    +string joinCode
+    +string backgroundImage
+    +int gridCols
+    +int gridRows
+    +UserResource dm
+    +CharacterResource[] characters
+    +array initiativeOrder
+    +int currentTurnIndex
+    +string createdAt
+  }
+
+  class AuthResource <<Resource>> {
+    +string token
+    +UserResource user
+  }
+}
+
+' ===== CONTROLLERS =====
+
+package "Controllers" {
+  class AuthController {
+    +register(Request) : AuthResource
+    +login(Request) : AuthResource
+    +verify2fa(Request) : AuthResource
+    +generate2faSecret(Request) : json
+    +enable2fa(Request) : json
+    +user(Request) : UserResource
+    +redirectToProvider(provider) : redirect
+    +handleProviderCallback(provider) : redirect
+    +logout(Request) : json
+  }
+
+  class CharacterController {
+    +index() : CharacterResource[]
+    +store(StoreCharacterRequest) : CharacterResource
+    +show(Character) : CharacterResource
+    +update(UpdateCharacterRequest) : CharacterResource
+    +destroy(Character) : json
+  }
+
+  class BoardController {
+    +index() : BoardResource[]
+    +store(StoreBoardRequest) : BoardResource
+    +show(Board) : BoardResource
+    +update(UpdateBoardRequest) : BoardResource
+    +destroy(Board) : json
+    +join(Request) : BoardResource
+    +updateCharacterPosition(Request, Board) : json
+    +nextTurn(Board) : json
+    +removeCharacter(Board, Character) : json
+  }
+
+  class AdminController {
+    +stats() : json
+    +indexUsers() : json
+    +destroyUser(User) : json
+    +indexBoards() : json
+    +destroyBoard(Board) : json
+  }
+
+  class AdminMiddleware <<Middleware>> {
+    +handle(request, next) : Response
+  }
+}
+
+' ===== RELACIONES =====
+
+User "1" -- "*" Character
+User "1" -- "*" Board
+Character "*" -- "*" Board
+(Character, Board) .. BoardCharacter
+
+User ..> Role
+Character ..> CharacterClass
+Board ..> BoardMap
+
+AuthController ..> User
+AuthController ..> AuthResource
+CharacterController ..> Character
+CharacterController ..> CharacterResource
+BoardController ..> Board
+BoardController ..> BoardResource
+AdminController ..> User
+AdminController ..> Board
+AdminMiddleware ..> User
+
+@enduml

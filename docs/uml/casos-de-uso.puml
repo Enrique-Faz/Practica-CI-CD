@@ -1,0 +1,97 @@
+@startuml casos-de-uso
+
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+
+title Diagrama de Casos de Uso — D&D Board
+
+actor "Invitado" as guest
+actor "Jugador" as user
+actor "Administrador" as admin
+
+user --|> guest
+admin --|> user
+
+rectangle "Autenticación" {
+  usecase "Registrarse" as UC_REG
+  usecase "Iniciar sesión" as UC_LOGIN
+  usecase "Iniciar sesión\ncon Google" as UC_GOOGLE
+  usecase "Cerrar sesión" as UC_LOGOUT
+  usecase "Configurar 2FA" as UC_2FA
+  usecase "Verificar código 2FA" as UC_VERIFY2FA
+}
+
+rectangle "Gestión de Personajes" {
+  usecase "Ver mis personajes" as UC_LIST_CHAR
+  usecase "Crear personaje" as UC_CREATE_CHAR
+  usecase "Editar personaje" as UC_EDIT_CHAR
+  usecase "Eliminar personaje" as UC_DEL_CHAR
+}
+
+rectangle "Gestión de Tableros" {
+  usecase "Ver mis tableros" as UC_LIST_BOARD
+  usecase "Crear tablero (como DM)" as UC_CREATE_BOARD
+  usecase "Editar tablero" as UC_EDIT_BOARD
+  usecase "Eliminar tablero" as UC_DEL_BOARD
+  usecase "Unirse a tablero\n(con código)" as UC_JOIN_BOARD
+}
+
+rectangle "Juego en Tablero" {
+  usecase "Ver tablero de juego" as UC_VIEW_BOARD
+  usecase "Mover personaje\nen el grid" as UC_MOVE
+  usecase "Avanzar turno\nde iniciativa" as UC_NEXT_TURN
+  usecase "Expulsar personaje\ndel tablero" as UC_REMOVE_CHAR
+  usecase "Configurar grid\n(filas/columnas)" as UC_GRID_CONFIG
+  usecase "Tirar dados" as UC_DICE
+}
+
+rectangle "Panel de Administración" {
+  usecase "Ver estadísticas\n(usuarios, tableros)" as UC_STATS
+  usecase "Listar usuarios" as UC_LIST_USERS
+  usecase "Eliminar usuario" as UC_DEL_USER
+  usecase "Listar tableros" as UC_LIST_BOARDS_ADMIN
+  usecase "Eliminar tablero\n(admin)" as UC_DEL_BOARD_ADMIN
+}
+
+rectangle "Perfil" {
+  usecase "Ver perfil" as UC_PROFILE
+}
+
+' --- Invitado ---
+guest --> UC_REG
+guest --> UC_LOGIN
+guest --> UC_GOOGLE
+
+' --- Jugador ---
+user --> UC_LOGOUT
+user --> UC_2FA
+user --> UC_VERIFY2FA
+user --> UC_PROFILE
+
+user --> UC_LIST_CHAR
+user --> UC_CREATE_CHAR
+user --> UC_EDIT_CHAR
+user --> UC_DEL_CHAR
+
+user --> UC_LIST_BOARD
+user --> UC_CREATE_BOARD
+user --> UC_EDIT_BOARD
+user --> UC_DEL_BOARD
+user --> UC_JOIN_BOARD
+
+user --> UC_VIEW_BOARD
+user --> UC_MOVE
+user --> UC_NEXT_TURN
+user --> UC_REMOVE_CHAR
+user --> UC_GRID_CONFIG
+user --> UC_DICE
+
+' --- Administrador ---
+admin --> UC_STATS
+admin --> UC_LIST_USERS
+admin --> UC_DEL_USER
+admin --> UC_LIST_BOARDS_ADMIN
+admin --> UC_DEL_BOARD_ADMIN
+
+@enduml

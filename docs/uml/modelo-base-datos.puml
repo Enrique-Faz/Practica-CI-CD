@@ -1,0 +1,107 @@
+@startuml modelo-base-datos
+
+skinparam linetype ortho
+hide circle
+
+title Modelo de Base de Datos — D&D Board
+
+entity "users" as users {
+  * **id** : bigint <<PK, AI>>
+  --
+  * first_name : varchar(255)
+  * last_name : varchar(255)
+  * email : varchar(255) <<unique>>
+  email_verified_at : timestamp
+  * password : varchar(255)
+  * role : enum('admin','normal') = 'normal'
+  google2fa_secret : text
+  remember_token : varchar(100)
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "boards" as boards {
+  * **id** : bigint <<PK, AI>>
+  --
+  * name : varchar(255)
+  * dm_id : bigint <<FK>>
+  join_code : varchar(8) <<unique>>
+  * background_image : varchar(255) = 'tavern.jpg'
+  grid_cols : int unsigned
+  grid_rows : int unsigned
+  initiative_order : json
+  * current_turn_index : int = 0
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "characters" as characters {
+  * **id** : bigint <<PK, AI>>
+  --
+  * user_id : bigint <<FK>>
+  * name : varchar(255)
+  * class : varchar(255) = 'guerrero'
+  * hp : int = 10
+  * speed : int = 30
+  * strength : int = 10
+  * dexterity : int = 10
+  * constitution : int = 10
+  * intelligence : int = 10
+  * wisdom : int = 10
+  * charisma : int = 10
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "board_character" as board_character {
+  * **id** : bigint <<PK, AI>>
+  --
+  * board_id : bigint <<FK>>
+  * character_id : bigint <<FK>>
+  * position_x : int = 0
+  * position_y : int = 0
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "personal_access_tokens" as tokens {
+  * **id** : bigint <<PK, AI>>
+  --
+  * tokenable_type : varchar(255)
+  * tokenable_id : bigint
+  * name : text
+  * token : varchar(64) <<unique>>
+  abilities : text
+  last_used_at : timestamp
+  expires_at : timestamp
+  * created_at : timestamp
+  * updated_at : timestamp
+}
+
+entity "password_reset_tokens" as pwd_reset {
+  * **email** : varchar(255) <<PK>>
+  --
+  * token : varchar(255)
+  created_at : timestamp
+}
+
+entity "sessions" as sessions {
+  * **id** : varchar(255) <<PK>>
+  --
+  user_id : bigint <<FK>>
+  ip_address : varchar(45)
+  user_agent : text
+  payload : longtext
+  * last_activity : int
+}
+
+' ===== RELACIONES =====
+
+users ||--o{ boards : "dm_id"
+users ||--o{ characters : "user_id"
+boards ||--o{ board_character : "board_id"
+characters ||--o{ board_character : "character_id"
+users ||--o{ tokens : "tokenable_id\n(morph)"
+users ||--o{ sessions : "user_id"
+
+@enduml
