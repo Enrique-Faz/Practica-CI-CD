@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Board;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -22,7 +21,7 @@ class AdminController extends Controller
         return response()->json([
             'total_users' => User::count(),
             'total_boards' => Board::count(),
-            'chart_data' => $boardsLast7Days
+            'chart_data' => $boardsLast7Days,
         ]);
     }
 

@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'lastName' => $this->last_name ?? '',
             'email' => $this->email,
             'role' => $this->role ?? 'normal',
-            'google2fa_enabled' => !empty($this->google2fa_secret),
+            'google2fa_enabled' => ! empty($this->google2fa_secret),
         ];
     }
 }

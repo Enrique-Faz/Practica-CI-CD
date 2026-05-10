@@ -22,7 +22,7 @@ class Character extends Model
         'intelligence',
         'wisdom',
         'charisma',
-        'speed'
+        'speed',
     ];
 
     public function user(): BelongsTo

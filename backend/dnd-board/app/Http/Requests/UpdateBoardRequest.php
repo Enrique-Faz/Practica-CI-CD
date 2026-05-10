@@ -16,6 +16,7 @@ class UpdateBoardRequest extends FormRequest
     public function authorize(): bool
     {
         $board = $this->route('board');
+
         return $board && $board->dm_id === Auth::id();
     }
 

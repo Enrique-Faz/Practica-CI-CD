@@ -38,6 +38,7 @@ class BoardController extends Controller
         $data = $request->validated();
         $data['dm_id'] = Auth::id();
         $board = Board::create($data);
+
         return (new BoardResource($board->load('dm')))
             ->response()
             ->setStatusCode(201);
@@ -49,6 +50,7 @@ class BoardController extends Controller
     public function show(Board $board)
     {
         $board->load(['dm', 'characters']);
+
         return new BoardResource($board);
     }
 
@@ -58,6 +60,7 @@ class BoardController extends Controller
     public function update(UpdateBoardRequest $request, Board $board)
     {
         $board->update($request->validated());
+
         return new BoardResource($board->load(['dm', 'characters']));
     }
 
@@ -71,13 +74,14 @@ class BoardController extends Controller
             abort(403, 'Solo el Dungeon Master o un administrador puede borrar la partida.');
         }
         $board->delete();
+
         return response()->noContent();
     }
 
     public function join(Request $request)
     {
         $request->validate([
-            'join_code'    => 'required|string',
+            'join_code' => 'required|string',
             'character_id' => 'required|integer|exists:characters,id',
         ]);
 
@@ -99,7 +103,7 @@ class BoardController extends Controller
     }
 
     /* -------------------------------------------------------------------------- */
-    /* TABLERO INTERACTIVO                                                        */
+    /* TABLERO INTERACTIVO */
     /* -------------------------------------------------------------------------- */
 
     /**
@@ -118,16 +122,16 @@ class BoardController extends Controller
 
         $character = $board->characters()->find($request->character_id);
 
-        if (!$character) {
+        if (! $character) {
             return response()->json(['message' => 'El personaje no está en esta partida'], 404);
         }
 
-        if (!$isDm) {
+        if (! $isDm) {
             if ($character->user_id !== $user->id) {
                 return response()->json(['message' => 'No puedes mover el personaje de otro jugador'], 403);
             }
 
-            if (!is_null($board->initiative_order)) {
+            if (! is_null($board->initiative_order)) {
                 $currentIndex = $board->current_turn_index;
                 $currentTurnCharacterId = $board->initiative_order[$currentIndex]['character_id'] ?? null;
 
@@ -144,7 +148,7 @@ class BoardController extends Controller
 
         if ($distance > $maxCells) {
             return response()->json([
-                'message' => "Movimiento fuera de rango. Máximo: {$maxCells} casillas, distancia: {$distance}."
+                'message' => "Movimiento fuera de rango. Máximo: {$maxCells} casillas, distancia: {$distance}.",
             ], 422);
         }
 
@@ -165,12 +169,12 @@ class BoardController extends Controller
             return response()->json(['message' => 'No hay orden de iniciativa configurado.'], 422);
         }
 
-        if (!$isDm) {
+        if (! $isDm) {
             $currentIndex = $board->current_turn_index;
             $currentTurnCharacterId = $board->initiative_order[$currentIndex]['character_id'] ?? null;
 
             $character = $board->characters()->find($currentTurnCharacterId);
-            if (!$character || $character->user_id !== $user->id) {
+            if (! $character || $character->user_id !== $user->id) {
                 return response()->json(['message' => 'Solo puedes pasar turno cuando es tu turno.'], 403);
             }
         }
@@ -189,11 +193,11 @@ class BoardController extends Controller
         $isDm = $board->dm_id === $user->id;
         $isOwner = $character->user_id === $user->id;
 
-        if (!$isAdmin && !$isDm && !$isOwner) {
+        if (! $isAdmin && ! $isDm && ! $isOwner) {
             abort(403, 'No tienes permiso para expulsar este personaje.');
         }
 
-        if (!$board->characters()->where('character_id', $character->id)->exists()) {
+        if (! $board->characters()->where('character_id', $character->id)->exists()) {
             return response()->json(['message' => 'El personaje no está en esta partida.'], 404);
         }
 

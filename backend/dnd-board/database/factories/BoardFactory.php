@@ -20,7 +20,7 @@ class BoardFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => "Campaña: " . fake()->sentence(3),
+            'name' => 'Campaña: '.fake()->sentence(3),
             'dm_id' => User::where('role', 'normal')->inRandomOrder()->first()->id ?? User::factory(),
             'background_image' => fake()->randomElement(array_column(BoardMap::cases(), 'value')),
             'initiative_order' => null,

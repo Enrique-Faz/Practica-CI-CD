@@ -16,6 +16,7 @@ class UpdateCharacterRequest extends FormRequest
     public function authorize(): bool
     {
         $character = $this->route('character');
+
         return $character && $character->user_id === Auth::id();
     }
 

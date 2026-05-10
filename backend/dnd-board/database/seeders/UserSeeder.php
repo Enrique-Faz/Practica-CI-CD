@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -21,10 +20,10 @@ class UserSeeder extends Seeder
         User::factory()
             ->withCharacters()
             ->create([
-            'first_name' => 'Test',
-            'last_name' => 'Player',
-            'email' => 'test@dnd.com',
-            'role' => 'normal',
-        ]);
+                'first_name' => 'Test',
+                'last_name' => 'Player',
+                'email' => 'test@dnd.com',
+                'role' => 'normal',
+            ]);
     }
 }

@@ -32,7 +32,7 @@ class User extends Authenticatable
     ];
 
     /* -------------------------------------------------------------------------- */
-    /* RELACIONES DE BASE DE DATOS                                                */
+    /* RELACIONES DE BASE DE DATOS */
     /* -------------------------------------------------------------------------- */
 
     public function characters()

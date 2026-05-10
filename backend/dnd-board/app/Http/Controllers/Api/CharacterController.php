@@ -7,7 +7,6 @@ use App\Http\Requests\StoreCharacterRequest;
 use App\Http\Requests\UpdateCharacterRequest;
 use App\Http\Resources\CharacterResource;
 use App\Models\Character;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CharacterController extends Controller
@@ -18,6 +17,7 @@ class CharacterController extends Controller
     public function index()
     {
         $characters = Auth::user()->characters;
+
         return CharacterResource::collection($characters);
     }
 
@@ -27,6 +27,7 @@ class CharacterController extends Controller
     public function store(StoreCharacterRequest $request)
     {
         $character = Auth::user()->characters()->create($request->validated());
+
         return (new CharacterResource($character))
             ->response()
             ->setStatusCode(201);
@@ -38,6 +39,7 @@ class CharacterController extends Controller
     public function show(Character $character)
     {
         $this->authorizeOwner($character);
+
         return new CharacterResource($character);
     }
 
@@ -47,6 +49,7 @@ class CharacterController extends Controller
     public function update(UpdateCharacterRequest $request, Character $character)
     {
         $character->update($request->validated());
+
         return new CharacterResource($character);
     }
 

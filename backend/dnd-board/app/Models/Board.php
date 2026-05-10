@@ -20,7 +20,7 @@ class Board extends Model
         'grid_cols',
         'grid_rows',
         'initiative_order',
-        'current_turn_index'
+        'current_turn_index',
     ];
 
     protected static function boot(): void
