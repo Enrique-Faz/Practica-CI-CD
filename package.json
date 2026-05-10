@@ -1,0 +1,30 @@
+{
+  "name": "3tpi-enrique71296-dotcom",
+  "version": "1.0.0",
+  "description": "Aplicación web para gestionar campañas y tableros de D&D. Stack completo con **Laravel** (API REST) + **Angular 21** (SPA), desplegado con Docker.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "prepare": "husky",
+    "lint:commits": "commitlint --from HEAD~1 --to HEAD --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/politecnicoDAW-2025/3tpi-enrique71296-dotcom.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/politecnicoDAW-2025/3tpi-enrique71296-dotcom/issues"
+  },
+  "homepage": "https://github.com/politecnicoDAW-2025/3tpi-enrique71296-dotcom#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.0",
+    "@commitlint/config-conventional": "^21.0.0",
+    "husky": "^9.1.7"
+  }
+}

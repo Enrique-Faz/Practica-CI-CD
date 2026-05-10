@@ -1,0 +1,3 @@
+# Este hook se puede usar para lint antes de commit.
+# Actualmente vacío — configura aquí tus checks si los necesitas.
+
