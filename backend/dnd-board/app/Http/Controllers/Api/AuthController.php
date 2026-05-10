@@ -3,21 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use app\Http\Controllers\Controller;
+use App\Http\Resources\AuthResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Laravel\Socialite\Facades\Socialite;
 use PragmaRX\Google2FA\Google2FA;
-use App\Http\Resources\UserResource;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Log;
-use App\Http\Resources\AuthResource;
-
 
 class AuthController extends Controller
 {
-
     /* -------------------------------------------------------------------------- /
     / 0. REGISTRO (Email/Password)                                               /
     / -------------------------------------------------------------------------- */
@@ -55,7 +51,7 @@ class AuthController extends Controller
     }
 
     /* -------------------------------------------------------------------------- */
-    /* 1. AUTENTICACIÓN ESTÁNDAR (Email/Pass) + Lógica 2FA                        */
+    /* 1. AUTENTICACIÓN ESTÁNDAR (Email/Pass) + Lógica 2FA */
     /* -------------------------------------------------------------------------- */
 
     public function login(Request $request)
@@ -67,7 +63,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'Las credenciales son incorrectas.',
             ], 401);
@@ -77,7 +73,7 @@ class AuthController extends Controller
             return response()->json([
                 'message' => '2FA requerido',
                 'require_2fa' => true,
-                'temp_user_id' => $user->id
+                'temp_user_id' => $user->id,
             ]);
         }
 
@@ -93,7 +89,7 @@ class AuthController extends Controller
     }
 
     /* -------------------------------------------------------------------------- */
-    /* 2. VERIFICACIÓN DE 2FA (Segunda fase del login)                            */
+    /* 2. VERIFICACIÓN DE 2FA (Segunda fase del login) */
     /* -------------------------------------------------------------------------- */
 
     public function user(Request $request)
@@ -109,7 +105,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::find($request->user_id);
-        $google2fa = new Google2FA();
+        $google2fa = new Google2FA;
 
         $valid = $google2fa->verifyKey($user->google2fa_secret, $request->code, 4);
 
@@ -129,7 +125,7 @@ class AuthController extends Controller
     }
 
     /* -------------------------------------------------------------------------- */
-    /* 3. CONFIGURACIÓN DE 2FA (Activar/Generar QR)                               */
+    /* 3. CONFIGURACIÓN DE 2FA (Activar/Generar QR) */
     /* -------------------------------------------------------------------------- */
 
     public function generate2faSecret(Request $request)
@@ -139,11 +135,11 @@ class AuthController extends Controller
         if ($user->google2fa_secret) {
             return response()->json([
                 'message' => 'El 2FA ya está activo en esta cuenta.',
-                'already_enabled' => true
+                'already_enabled' => true,
             ], 400);
         }
 
-        $google2fa = new Google2FA();
+        $google2fa = new Google2FA;
         $secret = $google2fa->generateSecretKey();
 
         $qrCodeUrl = $google2fa->getQRCodeUrl(
@@ -154,7 +150,7 @@ class AuthController extends Controller
 
         return response()->json([
             'secret' => $secret,
-            'qr_code_url' => $qrCodeUrl
+            'qr_code_url' => $qrCodeUrl,
         ]);
     }
 
@@ -163,7 +159,7 @@ class AuthController extends Controller
         $request->validate(['secret' => 'required', 'code' => 'required']);
         $user = $request->user();
 
-        $google2fa = new Google2FA();
+        $google2fa = new Google2FA;
         $valid = $google2fa->verifyKey($request->secret, $request->code, 4);
 
         if ($valid) {
@@ -177,7 +173,7 @@ class AuthController extends Controller
     }
 
     /* -------------------------------------------------------------------------- */
-    /* 4. SOCIALITE (Google, GitHub, etc.)                                        */
+    /* 4. SOCIALITE (Google, GitHub, etc.) */
     /* -------------------------------------------------------------------------- */
 
     public function redirectToProvider($provider)
@@ -205,6 +201,10 @@ class AuthController extends Controller
                 ]
             );
 
+            if ($user->google2fa_secret) {
+                return redirect(env('FRONTEND_URL', 'http://localhost:4200').'/login?require_2fa=true&temp_user_id='.$user->id);
+            }
+
             $tokenInstance = $user->createToken('auth_token');
 
             $authData = (new AuthResource($tokenInstance))->resolve();
@@ -214,10 +214,10 @@ class AuthController extends Controller
 
             $finalResponse = [
                 'data' => $authData,
-                'expiresAt' => $expiresAt
+                'expiresAt' => $expiresAt,
             ];
 
-            return redirect(env('FRONTEND_URL', 'http://localhost:4200') . '/login?session=' . urlencode(json_encode($finalResponse)));
+            return redirect(env('FRONTEND_URL', 'http://localhost:4200').'/login?session='.urlencode(json_encode($finalResponse)));
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 401);
@@ -225,12 +225,13 @@ class AuthController extends Controller
     }
 
     /* -------------------------------------------------------------------------- */
-    /* 5. LOGOUT                                                                  */
+    /* 5. LOGOUT */
     /* -------------------------------------------------------------------------- */
 
     public function logout(Request $request)
     {
         $request->user()->tokens()->delete();
+
         return response()->json(['message' => 'Sesión cerrada']);
     }
 }

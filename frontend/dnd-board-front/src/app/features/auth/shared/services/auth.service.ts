@@ -134,6 +134,16 @@ export class AuthService {
 
   #handleSocialCallback(): void {
     const params = new URLSearchParams(window.location.search);
+
+    const require2fa = params.get('require_2fa');
+    const tempUserId = params.get('temp_user_id');
+    if (require2fa === 'true' && tempUserId) {
+      this.#tempUserId.set(Number(tempUserId));
+      this.show2faInput.set(true);
+      this.#router.navigate(['/auth/login'], { replaceUrl: true });
+      return;
+    }
+
     const sessionRaw = params.get('session');
     if (!sessionRaw) return;
     try {
