@@ -63,10 +63,10 @@ logs-db: ## Logs en tiempo real de la base de datos (MySQL)
 # ─── BASE DE DATOS ────────────────────────────────────────────────────────────
 
 migrate: ## Ejecuta las migraciones de la base de datos
-	$(DC) exec app php artisan migrate
+	$(DC) exec app php artisan migrate --force
 
 seed: ## Ejecuta los seeders (datos de prueba) — solo para local
-	$(DC) exec app php artisan db:seed
+	$(DC) exec app php artisan db:seed --force
 
 # ─── MANTENIMIENTO ───────────────────────────────────────────────────────────
 
