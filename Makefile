@@ -18,10 +18,8 @@ install: ## [LOCAL] Primera instalación: backend + frontend + DB en localhost
 	BUILD_CONFIG=development $(DC) --profile prod build
 	@echo "Iniciando contenedores..."
 	BUILD_CONFIG=development $(DC) --profile prod up -d
-	@echo "Generando clave de aplicación..."
-	$(DC) exec app php artisan key:generate
-	@$(MAKE) migrate
-	@echo "✅ Todo listo — Backend: localhost:8000 | Frontend: localhost:8001"
+	@echo "✅ Contenedores iniciados — el entrypoint espera a MySQL y migra automáticamente."
+	@echo "   Backend: localhost:8000 | Frontend: localhost:8001"
 
 install-prod: ## [PROD] Primera instalación en VPS (polidnd.chickenkiller.com)
 	@echo "Preparando archivos de configuración de producción..."
@@ -33,10 +31,8 @@ install-prod: ## [PROD] Primera instalación en VPS (polidnd.chickenkiller.com)
 	$(DC) --profile prod build
 	@echo "Iniciando contenedores..."
 	$(DC) --profile prod up -d
-	@echo "Generando clave de aplicación..."
-	$(DC) exec app php artisan key:generate
-	@$(MAKE) migrate
-	@echo "✅ Producción lista — Backend: :8000 | Frontend: :8001"
+	@echo "✅ Contenedores iniciados — el entrypoint espera a MySQL y migra automáticamente."
+	@echo "   Backend: :8000 | Frontend: :8001"
 
 # ─── CICLO DE VIDA ───────────────────────────────────────────────────────────
 
