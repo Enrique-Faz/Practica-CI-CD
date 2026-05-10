@@ -15,7 +15,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     headers = headers.set('Authorization', `Bearer ${token}`);
   }
 
-  let clonedReq = req;
+  let clonedReq: typeof req;
   if (req.body && typeof req.body === 'object') {
     headers = headers.set('Content-Type', 'application/json');
     const newBody = convertKeysToSnakeCase(req.body);

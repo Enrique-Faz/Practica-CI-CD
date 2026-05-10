@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpResourceRef, httpResource } from '@angular/common/http';
 import { WritableSignal } from '@angular/core';
 

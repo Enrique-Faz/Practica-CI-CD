@@ -1,4 +1,4 @@
-import { Component, effect, input, output, signal } from '@angular/core';
+import { Component, OnInit, effect, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Board } from '../../shared/interfaces/board.interface';
@@ -46,7 +46,7 @@ import { Board } from '../../shared/interfaces/board.interface';
     </div>
   `,
 })
-export class GridConfigPanel {
+export class GridConfigPanel implements OnInit {
   board = input.required<Board>();
   onGridSaved = output<{ cols: number; rows: number }>();
   previewChanged = output<{ cols: number; rows: number }>();
