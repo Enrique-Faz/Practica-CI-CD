@@ -1,7 +1,7 @@
 BACKEND_DIR = backend/dnd-board
 DC = docker compose
 
-.PHONY: help install install-prod up up-back down logs logs-front logs-db shell migrate seed clean cache fclean reset reset-prod
+.PHONY: help install install-prod up up-back down logs logs-front logs-db shell migrate seed clean cache fclean reset reset-prod lint lint-front lint-back
 
 help: ## Muestra todos los comandos disponibles
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}'
@@ -63,6 +63,16 @@ migrate: ## Ejecuta las migraciones de la base de datos
 
 seed: ## Ejecuta los seeders (datos de prueba) — solo para local
 	$(DC) exec app php artisan db:seed --force
+
+# ─── LINTING ─────────────────────────────────────────────────────────────────
+
+lint: lint-back lint-front ## Ejecuta linters de backend y frontend
+
+lint-back: ## Ejecuta Laravel Pint (fija el código automáticamente)
+	cd $(BACKEND_DIR) && ./vendor/bin/pint
+
+lint-front: ## Ejecuta ESLint en el frontend (modo check)
+	cd frontend/dnd-board-front && npm run lint
 
 # ─── MANTENIMIENTO ───────────────────────────────────────────────────────────
 
