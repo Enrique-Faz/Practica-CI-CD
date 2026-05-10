@@ -1,0 +1,145 @@
+<mxfile host="app.diagrams.net" agent="draw.io">
+  <diagram id="admin" name="Mapa Web — Administrador">
+    <mxGraphModel dx="1664" dy="919" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=16;fontStyle=1;align=center;whiteSpace=wrap;" value="Mapa Web — Administrador (Admin)" vertex="1">
+          <mxGeometry height="50" width="600" x="450" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="inherits" parent="1" style="text;html=1;fontSize=11;align=left;whiteSpace=wrap;fillColor=#fff2cc;strokeColor=#d6b656;rounded=1;fontStyle=2;" value="El admin hereda TODAS las páginas&#xa;del jugador y además tiene acceso&#xa;exclusivo al panel de administración." vertex="1">
+          <mxGeometry height="60" width="250" x="20" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="dashboard" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" value="/dashboard" vertex="1">
+          <mxGeometry height="60" width="200" x="500" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="myBoards" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="/dashboard/my-boards" vertex="1">
+          <mxGeometry height="50" width="200" x="120" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e_d_mb" edge="1" parent="1" source="dashboard" style="edgeStyle=orthogonalEdgeStyle;" target="myBoards">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="myChars" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="/dashboard/my-characters" vertex="1">
+          <mxGeometry height="50" width="200" x="380" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e_d_mc" edge="1" parent="1" source="dashboard" style="edgeStyle=orthogonalEdgeStyle;" target="myChars">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="profile" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="/profile" vertex="1">
+          <mxGeometry height="50" width="180" x="640" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e_d_pr" edge="1" parent="1" source="dashboard" style="edgeStyle=orthogonalEdgeStyle;" target="profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="boardPage" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontStyle=1;" value="/board/:id&#xa;(fullscreen)" vertex="1">
+          <mxGeometry height="50" width="200" x="120" y="340" as="geometry" />
+        </mxCell>
+        <mxCell id="e_mb_bp" edge="1" parent="1" source="myBoards" style="edgeStyle=orthogonalEdgeStyle;" target="boardPage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inheritedComps" parent="1" style="text;html=1;fontSize=10;align=left;whiteSpace=wrap;fillColor=#f5f5f5;strokeColor=#CCCCCC;rounded=1;fontStyle=2;" value="Componentes heredados del jugador:&#xa;BoardCard, CreateBoardModal, JoinBoardModal,&#xa;CharacterCard, CharacterFormModal,&#xa;BoardGrid, SideNavPanel, TwoFaModal..." vertex="1">
+          <mxGeometry height="70" width="280" x="30" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="adminPanel" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1;" value="/admin&#xa;Panel de Administración&#xa;(adminGuard)" vertex="1">
+          <mxGeometry height="70" width="260" x="1050" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="e_d_admin" edge="1" parent="1" source="dashboard" style="edgeStyle=orthogonalEdgeStyle;" target="adminPanel" value="navbar (solo admin)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="stats" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1;" value="/admin/stats&#xa;Estadísticas" vertex="1">
+          <mxGeometry height="60" width="200" x="930" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ap_st" edge="1" parent="1" source="adminPanel" style="edgeStyle=orthogonalEdgeStyle;" target="stats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="manage" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=13;fontStyle=1;" value="/admin/manage&#xa;Gestión de Entidades" vertex="1">
+          <mxGeometry height="60" width="200" x="1220" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ap_mg" edge="1" parent="1" source="adminPanel" style="edgeStyle=orthogonalEdgeStyle;" target="manage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="boardsChart" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" value="Boards&#xa;Chart" vertex="1">
+          <mxGeometry height="100" width="130" x="850" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="e_st_bc" edge="1" parent="1" source="stats" style="edgeStyle=orthogonalEdgeStyle;" target="boardsChart">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="statsCards" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=0;" value="KPI Cards&#xa;(usuarios, tableros)" vertex="1">
+          <mxGeometry height="100" width="140" x="1010" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="e_st_sc" edge="1" parent="1" source="stats" style="edgeStyle=orthogonalEdgeStyle;" target="statsCards">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="usersTable" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" value="Users&#xa;Table" vertex="1">
+          <mxGeometry height="100" width="130" x="1190" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="e_mg_ut" edge="1" parent="1" source="manage" style="edgeStyle=orthogonalEdgeStyle;" target="usersTable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="boardsTable" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=1;" value="Boards&#xa;Table" vertex="1">
+          <mxGeometry height="100" width="130" x="1370" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="e_mg_bt" edge="1" parent="1" source="manage" style="edgeStyle=orthogonalEdgeStyle;" target="boardsTable">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actViewStats" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" value="Ver&#xa;estadísticas" vertex="1">
+          <mxGeometry height="55" width="130" x="850" y="597.5" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bc_vs" edge="1" parent="1" source="boardsChart" style="edgeStyle=orthogonalEdgeStyle;" target="actViewStats">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actViewKpis" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=0;" value="Ver KPIs&#xa;(total users/boards)" vertex="1">
+          <mxGeometry height="55" width="140" x="1010" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="e_sc_vk" edge="1" parent="1" source="statsCards" style="edgeStyle=orthogonalEdgeStyle;" target="actViewKpis">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actDeleteUser" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" value="Eliminar&#xa;usuario" vertex="1">
+          <mxGeometry height="55" width="120" x="1130" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ut_du" edge="1" parent="1" source="usersTable" style="edgeStyle=orthogonalEdgeStyle;" target="actDeleteUser">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actEditRole" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" value="Cambiar&#xa;rol usuario" vertex="1">
+          <mxGeometry height="55" width="120" x="1250" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ut_er" edge="1" parent="1" source="usersTable" style="edgeStyle=orthogonalEdgeStyle;" target="actEditRole">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actDeleteBoardAdmin" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;" value="Eliminar&#xa;tablero" vertex="1">
+          <mxGeometry height="55" width="120" x="1375" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bt_db" edge="1" parent="1" source="boardsTable" style="edgeStyle=orthogonalEdgeStyle;" target="actDeleteBoardAdmin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actLogout" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1;" value="Cerrar&#xa;sesión" vertex="1">
+          <mxGeometry height="55" width="120" x="1500" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e_nav_lo" edge="1" parent="1" source="dashboard" style="edgeStyle=orthogonalEdgeStyle;" target="actLogout" value="navbar">
+          <mxGeometry relative="1" x="-0.2744" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="600" y="70" />
+              <mxPoint x="1560" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_rect" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" value="Página" vertex="1">
+          <mxGeometry height="35" width="100" x="30" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_rectAdmin" parent="1" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;fontStyle=1;" value="Página (admin)" vertex="1">
+          <mxGeometry height="35" width="120" x="150" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_rhomb" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;fontStyle=1;" value="Componente" vertex="1">
+          <mxGeometry height="70" width="110" x="30" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_oval" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;fontStyle=1;" value="Acción" vertex="1">
+          <mxGeometry height="45" width="100" x="160" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_del" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=0;" value="Acción destructiva" vertex="1">
+          <mxGeometry height="40" width="120" x="30" y="680" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,147 @@
+<mxfile host="app.diagrams.net" agent="draw.io">
+  <diagram id="guest" name="Mapa Web — Invitado">
+    <mxGraphModel dx="1488" dy="822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=18;fontStyle=1;align=center;whiteSpace=wrap;" value="Mapa Web — Invitado (Guest)" vertex="1">
+          <mxGeometry height="40" width="400" x="370" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="login" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" value="/auth/login" vertex="1">
+          <mxGeometry height="60" width="200" x="310" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="register" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" value="/auth/register" vertex="1">
+          <mxGeometry height="60" width="200" x="630" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="dashboard" parent="1" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;" value="/dashboard" vertex="1">
+          <mxGeometry height="60" width="200" x="430" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="e_lr" edge="1" parent="1" source="login" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#999999;" target="register" value="enlace">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="loginForm" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1;" value="Formulario&#xa;Login" vertex="1">
+          <mxGeometry height="100" width="140" x="200" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="login" style="edgeStyle=orthogonalEdgeStyle;" target="loginForm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="twoFaInput" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;fontStyle=2;" value="Input 2FA&#xa;(condicional)" vertex="1">
+          <mxGeometry height="100" width="140" x="400" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="login" style="edgeStyle=orthogonalEdgeStyle;dashed=1;" target="twoFaInput" value="si 2FA activo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="registerForm" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;fontStyle=1;" value="Formulario&#xa;Registro" vertex="1">
+          <mxGeometry height="100" width="140" x="660" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="register" style="edgeStyle=orthogonalEdgeStyle;" target="registerForm">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actLogin" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" value="Entrar con&#xa;email + password" vertex="1">
+          <mxGeometry height="70" width="170" x="130" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="loginForm" style="edgeStyle=orthogonalEdgeStyle;" target="actLogin">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actGoogle" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" value="Continuar con&#xa;Google OAuth" vertex="1">
+          <mxGeometry height="70" width="170" x="330" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="loginForm" style="edgeStyle=orthogonalEdgeStyle;" target="actGoogle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="actVerify2fa" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" value="Verificar&#xa;código TOTP" vertex="1">
+          <mxGeometry height="70" width="160" x="440" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="twoFaInput" style="edgeStyle=orthogonalEdgeStyle;" target="actVerify2fa">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="470" y="390" />
+              <mxPoint x="520" y="390" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="actCancel2fa" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=0;" value="Volver&#xa;al login" vertex="1">
+          <mxGeometry height="60" width="120" x="620" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="e6b" edge="1" parent="1" source="twoFaInput" style="edgeStyle=orthogonalEdgeStyle;" target="actCancel2fa">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="270" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6c" edge="1" parent="1" source="actCancel2fa" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#999999;exitX=1;exitY=0.5;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="840" y="530" />
+              <mxPoint x="840" y="90" />
+              <mxPoint x="470" y="90" />
+            </Array>
+            <mxPoint x="800" y="530.0000000000002" as="sourcePoint" />
+            <mxPoint x="470" y="100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="actRegister" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1;" value="Crear&#xa;cuenta" vertex="1">
+          <mxGeometry height="70" width="130" x="670" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="registerForm" style="edgeStyle=orthogonalEdgeStyle;" target="actRegister">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="actLogin" style="edgeStyle=orthogonalEdgeStyle;" target="dashboard" value="login OK">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="620" />
+              <mxPoint x="530" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="actGoogle" style="edgeStyle=orthogonalEdgeStyle;" target="dashboard" value="OAuth OK">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="415" y="650" />
+              <mxPoint x="530" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="actVerify2fa" style="edgeStyle=orthogonalEdgeStyle;" target="dashboard" value="código OK">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="710" />
+              <mxPoint x="530" y="710" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="actRegister" style="edgeStyle=orthogonalEdgeStyle;dashed=1;strokeColor=#82b366;" target="login" value="registro OK →&#xa;redirige a login">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="425" />
+              <mxPoint x="870" y="70" />
+              <mxPoint x="410" y="70" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend_title" parent="1" style="text;html=1;fontSize=13;fontStyle=1;align=left;" value="Leyenda" vertex="1">
+          <mxGeometry height="30" width="100" x="30" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_page" parent="1" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="" vertex="1">
+          <mxGeometry height="20" width="30" x="30" y="675" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_page_t" parent="1" style="text;html=1;fontSize=11;align=left;" value="Página" vertex="1">
+          <mxGeometry height="20" width="80" x="70" y="675" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_comp" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="" vertex="1">
+          <mxGeometry height="25" width="30" x="30" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_comp_t" parent="1" style="text;html=1;fontSize=11;align=left;" value="Componente" vertex="1">
+          <mxGeometry height="20" width="100" x="70" y="703" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_act" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="" vertex="1">
+          <mxGeometry height="20" width="30" x="30" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="leg_act_t" parent="1" style="text;html=1;fontSize=11;align=left;" value="Acción" vertex="1">
+          <mxGeometry height="20" width="80" x="70" y="730" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
