@@ -32,7 +32,5 @@ export class BoardToken {
   character = input.required<Character>();
   isSelected = input<boolean>(false);
   isCurrentTurn = input<boolean>(false);
-  hasInitiative = input<boolean>(false);
-
   classImage = computed(() => `/Clases/${this.character().class}.png`);
 }

@@ -83,7 +83,7 @@
             </a>
 
             <a
-              routerLink="/admin/users"
+              routerLink="/admin/manage"
               routerLinkActive
               #rlaUsers="routerLinkActive"
               class="group flex flex-col items-center cursor-pointer"
@@ -134,30 +134,34 @@
           <div class="flex items-center gap-4 group">
             <!-- D20 icon -->
             <span
-              class="text-xl opacity-60 group-hover:opacity-100 transition-opacity"
+              class="text-xl text-amber-400 opacity-60 group-hover:opacity-100 transition-opacity"
               title="Aventurero"
-              >🎲</span
-            >
+              ><fa-icon [icon]="faDiceD20"
+            /></span>
             <div class="text-right hidden sm:block">
-              <p class="text-sm font-bold text-stone-200 leading-none">
+              <a
+                routerLink="/profile"
+                class="text-sm font-bold text-stone-200 leading-none hover:text-amber-400 transition-colors"
+              >
                 {{ currentUser()!.user.firstName }}
-              </p>
+              </a>
               <button
                 (click)="logout()"
-                class="text-[10px] uppercase tracking-widest text-stone-500 hover:text-red-400 transition-colors cursor-pointer"
+                class="text-[10px] uppercase tracking-widest text-stone-500 hover:text-red-400 transition-colors cursor-pointer block"
               >
                 Cerrar sesión
               </button>
             </div>
             <div class="relative">
-              <div
+              <a
+                routerLink="/profile"
                 class="h-11 w-11 rounded-xl bg-amber-700 border-2 border-transparent group-hover:border-amber-400 transition-all shadow-md flex items-center justify-center"
               >
                 <span class="text-sm font-black text-amber-100 uppercase">
                   {{ currentUser()!.user.firstName.charAt(0)
                   }}{{ currentUser()!.user.lastName.charAt(0) }}
                 </span>
-              </div>
+              </a>
               <div
                 class="absolute -bottom-1 -right-1 h-3.5 w-3.5 bg-emerald-500 border-2 border-stone-900 rounded-full"
               ></div>

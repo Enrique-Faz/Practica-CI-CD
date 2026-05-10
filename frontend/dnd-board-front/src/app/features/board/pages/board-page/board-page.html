@@ -43,7 +43,7 @@
     }
 
     <!-- Layout principal -->
-    <div class="flex flex-1 overflow-hidden">
+    <div class="flex flex-1 overflow-hidden relative">
       <!-- Grid del tablero (centro) -->
       <div class="flex-1 overflow-hidden">
         <app-board-grid
@@ -51,18 +51,35 @@
           [reachableCells]="reachableCells()"
           [selectedCharacter]="selectedCharacter()"
           [zoom]="zoom()"
+          [panX]="panX()"
+          [panY]="panY()"
           [previewGrid]="previewGrid()"
           (tokenClicked)="onTokenClicked($event)"
           (cellClicked)="onCellClicked($event)"
+          (panChanged)="onPanChanged($event)"
         />
       </div>
 
-      <!-- Panel derecho: iniciativa + participantes -->
-      <div
-        class="flex flex-col gap-4 p-3 w-72 shrink-0 overflow-y-auto bg-stone-900/50 border-l border-stone-800"
+      <!-- Botón toggle sidenav -->
+      <button
+        (click)="sideNavOpen.set(!sideNavOpen())"
+        class="absolute top-3 right-3 z-20 w-9 h-9 flex items-center justify-center rounded-lg bg-stone-800/90 hover:bg-stone-700 border border-stone-700 text-stone-300 hover:text-stone-100 transition-colors backdrop-blur-sm"
+        [class.right-[19rem]]="sideNavOpen()"
+        [title]="sideNavOpen() ? 'Cerrar panel' : 'Abrir panel'"
       >
-        <app-initiative-panel
+        <fa-icon [icon]="sideNavOpen() ? faChevronRight : faChevronLeft" />
+      </button>
+
+      <!-- Side nav panel -->
+      <div
+        class="flex flex-col gap-4 p-3 w-72 shrink-0 overflow-y-auto bg-stone-900/80 border-l border-stone-800 backdrop-blur-sm transition-transform duration-300 absolute top-0 right-0 h-full z-10"
+        [class.translate-x-0]="sideNavOpen()"
+        [class.translate-x-full]="!sideNavOpen()"
+      >
+        <app-side-nav-panel
+          class="flex flex-col flex-1 min-h-0"
           [board]="board()!"
+          [playerCharacter]="playerCharacter()"
           [canAdvanceTurn]="canAdvanceTurn()"
           [canEditInitiative]="isDm()"
           (nextTurn)="onNextTurn()"

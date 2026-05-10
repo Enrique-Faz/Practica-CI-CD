@@ -8,6 +8,7 @@ import {
   LoginRequest,
   LoggedUser,
   RegisterRequest,
+  User,
 } from '../interfaces/user.interface';
 
 const API = environment.apiEndpoint;
@@ -26,6 +27,10 @@ export class AuthService {
   show2faInput = signal<boolean>(false);
   isLoggedIn = computed(() => Boolean(this.currentUser()));
   isAdmin = computed(() => this.currentUser()?.user.role === 'admin');
+
+  constructor() {
+    this.#handleSocialCallback();
+  }
 
   login(loginSignal: WritableSignal<LoginRequest>): HttpResourceRef<AuthResponse | undefined> {
     const resource = httpResource<AuthResponse | undefined>(() => {
@@ -125,6 +130,35 @@ export class AuthService {
   reset2fa(): void {
     this.show2faInput.set(false);
     this.#tempUserId.set(null);
+  }
+
+  #handleSocialCallback(): void {
+    const params = new URLSearchParams(window.location.search);
+    const sessionRaw = params.get('session');
+    if (!sessionRaw) return;
+    try {
+      const parsed = JSON.parse(decodeURIComponent(sessionRaw));
+      const session: LoggedUser = {
+        token: parsed.data.token,
+        user: parsed.data.user,
+        expiresAt: parsed.expiresAt,
+      };
+      this.#updateSession(session);
+      this.#router.navigate(['/dashboard'], { replaceUrl: true });
+    } catch {
+      // ignore malformed session
+    }
+  }
+
+  refreshCurrentUser(): void {
+    const session = this.#currentUserSignal();
+    if (!session) return;
+    this.#http.get<{ data: { user: User } }>(`${API}/user`).subscribe({
+      next: (res) => {
+        const updated: LoggedUser = { ...session, user: res.data.user };
+        this.#updateSession(updated);
+      },
+    });
   }
 
   #updateSession(session: LoggedUser): void {

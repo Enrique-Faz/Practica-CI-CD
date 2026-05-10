@@ -3,6 +3,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { Login } from '../../components/login/login';
 import { LoginRequest } from '../../shared/interfaces/user.interface';
 import { extractApiError } from '../../../../shared/utils/extract-api.error.utils';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-login-page',
@@ -22,6 +23,7 @@ export class LoginPage {
   isLoading = this.#authService.isSyncing;
   show2FA = this.#authService.show2faInput;
   loginError = computed(() => extractApiError(this.loginResource.error()));
+  loadingGoogle = signal(false);
 
   handleLogin(credentials: LoginRequest): void {
     this.#loginSignal.set(credentials);
@@ -34,5 +36,12 @@ export class LoginPage {
 
   cancel2FA(): void {
     this.#authService.reset2fa();
+  }
+
+  redirectToGoogle(): void {
+    this.loadingGoogle.set(true);
+    setTimeout(() => {
+      window.location.href = `${environment.apiEndpoint}/auth/google`;
+    }, 100);
   }
 }

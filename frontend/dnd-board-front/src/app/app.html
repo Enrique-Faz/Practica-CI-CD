@@ -1,4 +1,6 @@
-<app-header />
+@if (!hideHeader()) {
+  <app-header />
+}
 <main class="min-h-screen bg-stone-950">
   <router-outlet />
 </main>

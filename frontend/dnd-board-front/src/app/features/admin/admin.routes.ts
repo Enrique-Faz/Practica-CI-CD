@@ -6,12 +6,8 @@ export const ADMIN_ROUTES: Routes = [
     loadComponent: () => import('./pages/stats-page/stats-page').then((m) => m.StatsPage),
   },
   {
-    path: 'users',
-    loadComponent: () => import('./pages/users-page/users-page').then((m) => m.UsersPage),
-  },
-  {
-    path: 'boards',
-    loadComponent: () => import('./pages/boards-page/boards-page').then((m) => m.BoardsPage),
+    path: 'manage',
+    loadComponent: () => import('./pages/manage-page/manage-page').then((m) => m.ManagePage),
   },
   {
     path: '',

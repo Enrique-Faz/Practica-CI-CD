@@ -20,12 +20,22 @@ export class App {
   readonly hideFooter = toSignal(
     this.#router.events.pipe(
       filter((e) => e instanceof NavigationEnd),
-      map(() => {
-        let route = this.#route;
-        while (route.firstChild) route = route.firstChild;
-        return !!route.snapshot.data['hideFooter'];
-      }),
+      map(() => this.#getDeepestRoute().snapshot.data['hideFooter'] === true),
     ),
     { initialValue: false },
   );
+
+  readonly hideHeader = toSignal(
+    this.#router.events.pipe(
+      filter((e) => e instanceof NavigationEnd),
+      map(() => this.#getDeepestRoute().snapshot.data['hideHeader'] === true),
+    ),
+    { initialValue: false },
+  );
+
+  #getDeepestRoute(): ActivatedRoute {
+    let route = this.#route;
+    while (route.firstChild) route = route.firstChild;
+    return route;
+  }
 }

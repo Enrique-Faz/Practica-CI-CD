@@ -44,7 +44,7 @@ class AdminController extends Controller
 
     public function indexBoards(): JsonResponse
     {
-        $boards = Board::with('dm:id,name,email')->paginate(20);
+        $boards = Board::with('dm:id,first_name,last_name,email')->paginate(20);
 
         return response()->json($boards);
     }

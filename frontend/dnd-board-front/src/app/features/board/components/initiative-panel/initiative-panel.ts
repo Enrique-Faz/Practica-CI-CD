@@ -1,4 +1,11 @@
 import { Component, computed, input, output, signal } from '@angular/core';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import {
+  faPlay,
+  faForwardStep,
+  faChevronUp,
+  faChevronDown,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { Character } from '../../../characters/shared/interfaces/character.interface';
 import { Board } from '../../shared/interfaces/board.interface';
@@ -6,6 +13,7 @@ import { Board } from '../../shared/interfaces/board.interface';
 @Component({
   selector: 'app-initiative-panel',
   templateUrl: './initiative-panel.html',
+  imports: [FaIconComponent],
 })
 export class InitiativePanel {
   board = input.required<Board>();
@@ -17,6 +25,11 @@ export class InitiativePanel {
 
   editMode = signal(false);
   editList = signal<Character[]>([]);
+
+  readonly faPlay = faPlay;
+  readonly faForwardStep = faForwardStep;
+  readonly faChevronUp = faChevronUp;
+  readonly faChevronDown = faChevronDown;
 
   initiativeList = computed<Character[]>(() => {
     const b = this.board();

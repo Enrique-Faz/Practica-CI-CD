@@ -3,6 +3,8 @@
     (loginOutput)="handleLogin($event)"
     [isLoading]="isLoading()"
     [errorMessage]="loginError()"
+    [loadingGoogle]="loadingGoogle()"
+    (googleClick)="redirectToGoogle()"
   />
 } @else {
   <!-- Sección 2FA -->

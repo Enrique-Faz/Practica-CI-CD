@@ -14,8 +14,10 @@ export class Login {
 
   errorMessage = input<string | undefined>();
   isLoading = input<boolean>(false);
+  loadingGoogle = input<boolean>(false);
 
   loginOutput = output<LoginRequest>();
+  googleClick = output<void>();
 
   loginForm = form(this.loginModel, (path) => {
     required(path.email, { message: 'El email es obligatorio' });

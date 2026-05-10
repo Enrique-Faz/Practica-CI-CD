@@ -1,0 +1,98 @@
+<div class="min-h-screen bg-stone-950 text-stone-100 p-8">
+  <div class="max-w-4xl mx-auto pt-16">
+    @if (userProfile.isLoading()) {
+      <div
+        class="flex justify-center py-20 animate-pulse text-amber-500 uppercase tracking-widest text-xs font-black"
+      >
+        Cargando perfil...
+      </div>
+    }
+
+    @if (userProfile.value(); as user) {
+      <!-- Header -->
+      <div class="flex justify-between items-end mb-10 border-b border-amber-900/40 pb-4">
+        <h1 class="text-4xl font-black uppercase italic tracking-tighter text-stone-100">
+          Panel de <span class="text-amber-400">Aventurero</span>
+        </h1>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Avatar -->
+        <div
+          class="bg-stone-900/60 border border-amber-900/30 rounded-2xl p-6 flex flex-col items-center gap-4"
+        >
+          <img
+            [src]="
+              'https://ui-avatars.com/api/?name=' +
+              user.firstName +
+              '+' +
+              user.lastName +
+              '&bg=92400e&color=fbbf24&bold=true'
+            "
+            class="w-28 h-28 rounded-xl border-2 border-amber-600/50 shadow-xl"
+            [alt]="user.firstName"
+          />
+          <div class="text-center">
+            <h2 class="text-xl font-black uppercase tracking-tight text-stone-100">
+              {{ user.firstName }} {{ user.lastName }}
+            </h2>
+            <p class="text-stone-500 text-sm">{{ user.email }}</p>
+            <span
+              class="mt-2 inline-block px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest"
+              [class.bg-red-900/40]="user.role === 'admin'"
+              [class.text-red-400]="user.role === 'admin'"
+              [class.bg-stone-800]="user.role !== 'admin'"
+              [class.text-stone-500]="user.role !== 'admin'"
+            >
+              {{ user.role === 'admin' ? 'Administrador' : 'Aventurero' }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Seguridad -->
+        <div class="md:col-span-2 bg-stone-900/60 border border-amber-900/30 rounded-2xl p-6">
+          <h3 class="text-xs font-black uppercase tracking-[0.3em] mb-6 text-stone-500">
+            Seguridad
+          </h3>
+
+          <div
+            class="flex items-center justify-between p-4 bg-stone-950/60 rounded-xl border border-stone-800"
+          >
+            <div class="flex items-center gap-3">
+              <fa-icon [icon]="faShield" class="text-amber-400 text-lg" />
+              <div>
+                <p class="font-bold uppercase text-xs tracking-widest text-stone-200">
+                  Doble Factor (2FA)
+                </p>
+                <p class="text-[10px] text-stone-500 mt-0.5">
+                  Protección adicional con código temporal
+                </p>
+              </div>
+            </div>
+
+            @if (user.google2fa_enabled) {
+              <div
+                class="flex items-center gap-1.5 text-emerald-400 text-[10px] font-black uppercase"
+              >
+                <fa-icon [icon]="faCircleCheck" />
+                <span>Activo</span>
+              </div>
+            } @else {
+              <button
+                (click)="prepare2fa()"
+                class="px-4 py-2 bg-amber-700/40 hover:bg-amber-700/60 text-amber-400 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors"
+              >
+                Activar
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Modal 2FA -->
+  @if (activeModal() === '2fa') {
+    <app-two-fa-modal />
+  }
+</div>

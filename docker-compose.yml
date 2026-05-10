@@ -1,0 +1,57 @@
+services:
+  web:
+    image: nginx:alpine
+    ports:
+      - "8000:80"
+    volumes:
+      - ./backend/dnd-board:/var/www
+      - ./backend/dnd-board/docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - laravel_network
+
+  app:
+    build:
+      context: ./backend/dnd-board
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/dnd-board:/var/www
+    depends_on:
+      - db
+    networks:
+      - laravel_network
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel_dnd
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+    ports:
+      - "3307:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel_network
+
+  frontend:
+    build:
+      context: ./frontend/dnd-board-front
+      dockerfile: Dockerfile
+      args:
+        BUILD_CONFIG: ${BUILD_CONFIG:-production}
+    ports:
+      - "8001:80"
+    profiles:
+      - prod
+    networks:
+      - laravel_network
+
+networks:
+  laravel_network:
+    driver: bridge
+
+volumes:
+  dbdata:

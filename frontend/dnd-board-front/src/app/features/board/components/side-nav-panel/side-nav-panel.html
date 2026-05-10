@@ -1,0 +1,56 @@
+<!-- Tabs -->
+<div class="flex flex-col h-full">
+  <!-- Tab buttons -->
+  <div class="flex border-b border-stone-700 mb-3 shrink-0">
+    @for (tab of tabs; track tab.key) {
+      <button
+        (click)="activeTab.set(tab.key)"
+        class="flex-1 py-2 text-xs font-bold uppercase tracking-wider transition-colors"
+        [class.text-amber-400]="activeTab() === tab.key"
+        [class.border-b-2]="activeTab() === tab.key"
+        [class.border-amber-400]="activeTab() === tab.key"
+        [class.text-stone-500]="activeTab() !== tab.key"
+        [class.hover:text-stone-300]="activeTab() !== tab.key"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <!-- Contenido del tab activo -->
+  <div class="flex-1 overflow-y-auto">
+    @switch (activeTab()) {
+      @case ('initiative') {
+        <app-initiative-panel
+          [board]="board()"
+          [canAdvanceTurn]="canAdvanceTurn()"
+          [canEditInitiative]="canEditInitiative()"
+          (nextTurn)="nextTurn.emit()"
+          (orderChanged)="orderChanged.emit($event)"
+        />
+      }
+      @case ('character') {
+        @if (playerCharacter()) {
+          <app-character-sheet [character]="playerCharacter()!" />
+        } @else {
+          <div class="flex items-center justify-center py-8">
+            <span class="text-stone-500 text-sm italic">No tienes personaje en esta partida</span>
+          </div>
+        }
+      }
+      @case ('dice') {
+        <app-dice-roller />
+      }
+    }
+  </div>
+
+  <!-- Botón salir -->
+  <div class="pt-4 mt-2 border-t border-stone-700 shrink-0">
+    <a
+      routerLink="/board/list"
+      class="flex items-center justify-center gap-2 w-full py-2 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-400 hover:text-stone-200 text-xs font-bold uppercase tracking-wide transition-colors"
+    >
+      <fa-icon [icon]="faArrowLeft" /> Salir al dashboard
+    </a>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="min-h-screen bg-stone-950 text-stone-100 p-8">
+  <div class="max-w-5xl mx-auto pt-8">
+    <div class="mb-10 border-b border-amber-900/40 pb-4">
+      <h1 class="text-4xl font-black uppercase italic tracking-tighter">
+        Gestión de <span class="text-amber-400">Recursos</span>
+      </h1>
+      <p class="text-stone-500 text-sm mt-1">Administra usuarios y partidas</p>
+    </div>
+
+    <!-- Usuarios -->
+    <section class="mb-12">
+      <h2 class="text-xs font-black uppercase tracking-[0.3em] mb-4 text-stone-500">Usuarios</h2>
+      @if (usersResource.isLoading()) {
+        <div
+          class="flex justify-center py-12 animate-pulse text-amber-500 uppercase tracking-widest text-xs font-black"
+        >
+          Cargando usuarios...
+        </div>
+      } @else if (usersResource.value()?.data; as users) {
+        <app-users-table [users]="users" (delete)="handleDeleteUser($event)" />
+      } @else if (usersResource.error()) {
+        <p class="text-red-400 text-xs font-bold uppercase">Error al cargar usuarios</p>
+      }
+    </section>
+
+    <!-- Partidas -->
+    <section>
+      <h2 class="text-xs font-black uppercase tracking-[0.3em] mb-4 text-stone-500">Partidas</h2>
+      @if (boardsResource.isLoading()) {
+        <div
+          class="flex justify-center py-12 animate-pulse text-amber-500 uppercase tracking-widest text-xs font-black"
+        >
+          Cargando partidas...
+        </div>
+      } @else if (boardsResource.value()?.data; as boards) {
+        <app-boards-table [boards]="boards" (delete)="handleDeleteBoard($event)" />
+      } @else if (boardsResource.error()) {
+        <p class="text-red-400 text-xs font-bold uppercase">Error al cargar partidas</p>
+      }
+    </section>
+  </div>
+</div>

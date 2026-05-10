@@ -217,7 +217,7 @@ class AuthController extends Controller
                 'expiresAt' => $expiresAt
             ];
 
-            return redirect("http://localhost:4200/login?session=" . urlencode(json_encode($finalResponse)));
+            return redirect(env('FRONTEND_URL', 'http://localhost:4200') . '/login?session=' . urlencode(json_encode($finalResponse)));
 
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 401);

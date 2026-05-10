@@ -23,7 +23,7 @@
           (click)="startCombat()"
           class="w-full py-2 bg-stone-700 hover:bg-stone-600 text-stone-200 text-xs font-black rounded-lg uppercase tracking-wide transition-colors"
         >
-          ⚔ Iniciar combate
+          <fa-icon [icon]="faPlay" class="mr-1" /> Iniciar combate
         </button>
       }
     } @else {
@@ -69,7 +69,7 @@
         [disabled]="!canAdvanceTurn()"
         class="mt-2 w-full py-2 bg-amber-600 hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed text-stone-900 text-xs font-black rounded-lg uppercase tracking-wide transition-colors"
       >
-        ⚔ Siguiente turno
+        <fa-icon [icon]="faForwardStep" class="mr-1" /> Siguiente turno
       </button>
     }
   }
@@ -98,7 +98,7 @@
               title="Subir"
               class="text-stone-400 hover:text-amber-400 disabled:opacity-20 disabled:cursor-not-allowed leading-none px-1 text-xs"
             >
-              ▲
+              <fa-icon [icon]="faChevronUp" />
             </button>
             <button
               (click)="moveDown(i)"
@@ -106,7 +106,7 @@
               title="Bajar"
               class="text-stone-400 hover:text-amber-400 disabled:opacity-20 disabled:cursor-not-allowed leading-none px-1 text-xs"
             >
-              ▼
+              <fa-icon [icon]="faChevronDown" />
             </button>
           </div>
         </li>

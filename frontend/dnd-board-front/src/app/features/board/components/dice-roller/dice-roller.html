@@ -1,0 +1,47 @@
+<!-- Selector de dado -->
+<div class="flex flex-wrap gap-1.5 justify-center">
+  @for (die of diceOptions; track die) {
+    <button
+      (click)="selectedDie.set(die)"
+      class="px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors"
+      [class.bg-amber-600]="selectedDie() === die"
+      [class.border-amber-500]="selectedDie() === die"
+      [class.text-stone-100]="selectedDie() === die"
+      [class.bg-stone-800]="selectedDie() !== die"
+      [class.border-stone-700]="selectedDie() !== die"
+      [class.text-stone-400]="selectedDie() !== die"
+      [class.hover:bg-stone-700]="selectedDie() !== die"
+    >
+      d{{ die }}
+    </button>
+  }
+</div>
+
+<!-- Botón lanzar -->
+<button
+  (click)="roll()"
+  class="mt-3 w-full py-2 rounded-lg bg-amber-600 hover:bg-amber-500 text-stone-100 font-bold text-sm transition-colors"
+>
+  <fa-icon [icon]="faDiceD20" class="mr-1" /> Lanzar d{{ selectedDie() }}
+</button>
+
+<!-- Historial -->
+@if (history().length > 0) {
+  <div class="mt-3 flex flex-col gap-1.5 max-h-60 overflow-y-auto">
+    @for (entry of history(); track entry.id) {
+      <div
+        class="flex items-center justify-between px-3 py-1.5 bg-stone-800/60 border border-stone-700/40 rounded-lg text-xs"
+      >
+        <span class="text-stone-400 font-semibold">d{{ entry.die }}</span>
+        <span
+          class="text-xl font-black"
+          [class.text-amber-400]="entry.result === entry.die"
+          [class.text-red-400]="entry.result === 1"
+          [class.text-stone-200]="entry.result !== entry.die && entry.result !== 1"
+        >
+          {{ entry.result }}
+        </span>
+      </div>
+    }
+  </div>
+}

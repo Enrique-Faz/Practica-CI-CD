@@ -15,23 +15,20 @@ export class BoardGrid {
   selectedCharacter = input<Character | null>(null);
   zoom = input<number>(1);
   previewGrid = input<{ cols: number; rows: number } | null>(null);
+  panX = input<number>(0);
+  panY = input<number>(0);
 
   tokenClicked = output<Character>();
   cellClicked = output<GridCell>();
+  panChanged = output<{ x: number; y: number }>();
 
-  // Pan (arrastrar el mapa)
-  panX = signal(0);
-  panY = signal(0);
+  // Estado efímero de pan — solo dura mientras se arrastra
   isPanning = signal(false);
   wasDragging = false;
   #panStartX = 0;
   #panStartY = 0;
   #panOriginX = 0;
   #panOriginY = 0;
-
-  // Tamaño fijo del tablero — la imagen siempre se muestra completa
-  readonly boardWidth = 1280;
-  readonly boardHeight = 960;
 
   cells = computed<GridCell[]>(() => {
     const cols = this.previewGrid()?.cols ?? this.board().gridCols ?? 20;
@@ -75,11 +72,6 @@ export class BoardGrid {
     return entry?.characterId === character.id;
   }
 
-  hasActiveInitiative(): boolean {
-    const order = this.board().initiativeOrder;
-    return !!order && order.length > 0;
-  }
-
   // Eventos
 
   onTokenClick(character: Character, event: Event): void {
@@ -111,12 +103,10 @@ export class BoardGrid {
     if (!this.isPanning()) return;
     const deltaX = event.clientX - this.#panStartX;
     const deltaY = event.clientY - this.#panStartY;
-    // Si se movió más de 3px, es un drag real
     if (Math.abs(deltaX) > 3 || Math.abs(deltaY) > 3) {
       this.wasDragging = true;
     }
-    this.panX.set(this.#panOriginX + deltaX);
-    this.panY.set(this.#panOriginY + deltaY);
+    this.panChanged.emit({ x: this.#panOriginX + deltaX, y: this.#panOriginY + deltaY });
   }
 
   onPanEnd(): void {

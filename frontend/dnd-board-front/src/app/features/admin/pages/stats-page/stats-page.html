@@ -1,0 +1,53 @@
+<div class="min-h-screen bg-stone-950 text-stone-100 p-8">
+  <div class="max-w-5xl mx-auto pt-8">
+    <div class="mb-10 border-b border-amber-900/40 pb-4">
+      <h1 class="text-4xl font-black uppercase italic tracking-tighter">
+        Panel de <span class="text-amber-400">Administrador</span>
+      </h1>
+      <p class="text-stone-500 text-sm mt-1">Estadísticas globales de la plataforma</p>
+    </div>
+
+    @if (stats.isLoading()) {
+      <div
+        class="flex justify-center py-20 animate-pulse text-amber-500 uppercase tracking-widest text-xs font-black"
+      >
+        Cargando estadísticas...
+      </div>
+    } @else if (stats.value(); as data) {
+      <!-- Summary cards -->
+      <div class="grid grid-cols-2 gap-4 mb-10">
+        <div
+          class="bg-stone-900/60 border border-amber-900/30 rounded-2xl p-6 flex items-center gap-4"
+        >
+          <div class="p-3 bg-amber-700/20 rounded-xl">
+            <fa-icon [icon]="faUsers" class="text-amber-400 text-2xl" />
+          </div>
+          <div>
+            <p class="text-xs font-black uppercase tracking-widest text-stone-500">Usuarios</p>
+            <p class="text-4xl font-black text-stone-100">{{ data.total_users }}</p>
+          </div>
+        </div>
+
+        <div
+          class="bg-stone-900/60 border border-amber-900/30 rounded-2xl p-6 flex items-center gap-4"
+        >
+          <div class="p-3 bg-amber-700/20 rounded-xl">
+            <fa-icon [icon]="faChessBoard" class="text-amber-400 text-2xl" />
+          </div>
+          <div>
+            <p class="text-xs font-black uppercase tracking-widest text-stone-500">Partidas</p>
+            <p class="text-4xl font-black text-stone-100">{{ data.total_boards }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="bg-stone-900/60 border border-amber-900/30 rounded-2xl p-6">
+        <h3 class="text-xs font-black uppercase tracking-[0.3em] mb-6 text-stone-500">
+          Partidas creadas — últimos 7 días
+        </h3>
+        <app-boards-chart [chartData]="data.chart_data" />
+      </div>
+    }
+  </div>
+</div>

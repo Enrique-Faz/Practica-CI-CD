@@ -1,0 +1,35 @@
+<div class="bg-stone-900/60 border border-amber-900/30 rounded-2xl overflow-hidden">
+  <table class="w-full">
+    <thead>
+      <tr class="border-b border-amber-900/30">
+        <th class="text-left p-4 text-xs font-black uppercase tracking-widest text-stone-500">
+          ID
+        </th>
+        <th class="text-left p-4 text-xs font-black uppercase tracking-widest text-stone-500">
+          Nombre
+        </th>
+        <th class="text-left p-4 text-xs font-black uppercase tracking-widest text-stone-500">
+          Creada
+        </th>
+        <th class="p-4"></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (board of boards(); track board.id) {
+        <tr class="border-b border-stone-800/50 hover:bg-stone-800/30 transition-colors">
+          <td class="p-4 text-stone-500 text-sm font-mono">{{ board.id }}</td>
+          <td class="p-4 font-bold text-stone-200">{{ board.name }}</td>
+          <td class="p-4 text-stone-400 text-sm">{{ board.createdAt }}</td>
+          <td class="p-4 text-right">
+            <button
+              (click)="delete.emit({ id: board.id, name: board.name })"
+              class="p-2 text-stone-600 hover:text-red-400 transition-colors"
+            >
+              <fa-icon [icon]="faTrash" />
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -36,6 +36,15 @@ services:
         networks:
             - laravel_network
 
+    frontend:
+        build:
+            context: ../../frontend/dnd-board-front
+            dockerfile: Dockerfile
+        ports:
+            - "8001:80"
+        networks:
+            - laravel_network
+
 networks:
     laravel_network:
         driver: bridge
