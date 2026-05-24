@@ -12,8 +12,9 @@ class ExampleTest extends TestCase
      */
     public function test_the_application_returns_a_successful_response(): void
     {
-        $response = $this->get('/');
+        $response = $this->postJson('/api/login', []);
 
-        $response->assertStatus(200);
+        // La API responde (422 = validación fallida, no 404)
+        $response->assertStatus(422);
     }
 }
