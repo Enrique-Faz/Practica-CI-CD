@@ -166,14 +166,15 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}:debian-latest
 
       # Escaneo de seguridad con ClamAV (instalado en el runner, sin daemon)
-      - name: Instalar ClamAV
+      - name: Instalar ClamAV y actualizar firmas
         run: |
           sudo apt-get install -y clamav --no-install-recommends
           sudo systemctl stop clamav-freshclam || true
+          sudo freshclam
 
       - name: Escaneo ClamAV (antivirus)
         run: |
-          # Exportar imagen a tar y escanear con la base de firmas preinstalada
+          # Exportar imagen a tar y escanear
           docker save ${{ env.DOCKERHUB_REPO }}:alpine-${{ steps.meta.outputs.short_sha }} -o /tmp/image.tar
           clamscan --no-summary --infected /tmp/image.tar
           echo "✅ Escaneo ClamAV completado"
