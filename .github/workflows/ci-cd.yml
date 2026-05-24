@@ -165,27 +165,18 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}:debian-${{ steps.meta.outputs.short_sha }}
             ${{ env.DOCKERHUB_REPO }}:debian-latest
 
-      # Escaneo de seguridad con ClamAV
-      - name: Pull imagen para escaneo
-        run: docker pull ${{ env.DOCKERHUB_REPO }}:alpine-${{ steps.meta.outputs.short_sha }}
+      # Escaneo de seguridad con ClamAV (instalado en el runner, sin daemon)
+      - name: Instalar ClamAV
+        run: |
+          sudo apt-get install -y clamav --no-install-recommends
+          sudo systemctl stop clamav-freshclam || true
 
       - name: Escaneo ClamAV (antivirus)
         run: |
-          docker run --rm \
-            -v /var/run/docker.sock:/var/run/docker.sock \
-            -v clamscan:/clamscan \
-            clamav/clamav:stable bash -c "
-              freshclam --quiet &&
-              mkdir -p /scan &&
-              echo 'Escaneando imagen Docker exportada...' &&
-              clamscan --recursive --infected --suppress-ok-results /clamscan || true
-            "
-
-          # Exportar la imagen y escanear sus capas
+          # Exportar imagen a tar y escanear con la base de firmas preinstalada
           docker save ${{ env.DOCKERHUB_REPO }}:alpine-${{ steps.meta.outputs.short_sha }} -o /tmp/image.tar
-          docker run --rm -v /tmp/image.tar:/scan/image.tar clamav/clamav:stable bash -c "
-            freshclam --quiet && clamscan /scan/image.tar --infected --suppress-ok-results
-          "
+          clamscan --no-summary --infected /tmp/image.tar
+          echo "✅ Escaneo ClamAV completado"
 
   # ============================================================================
   # JOB 3: Despliegue automático en VPS
