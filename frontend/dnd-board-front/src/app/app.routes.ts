@@ -31,6 +31,12 @@ export const routes: Routes = [
     canActivate: [adminGuard],
   },
   {
+    path: 'nueva-pagina',
+    loadChildren: () =>
+      import('./features/nueva-pagina/nueva-pagina.routes').then((m) => m.NUEVA_PAGINA_ROUTES),
+    canActivate: [authGuard],
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full',
