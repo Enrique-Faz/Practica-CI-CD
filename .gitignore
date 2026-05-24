@@ -1,9 +1,6 @@
 # IDEs
 .idea/
 
-# GitHub Codespaces / Actions (no subir workflows locales)
-.github/
-
 # Dependencias npm raíz (husky, commitlint)
 node_modules/
 package-lock.json
