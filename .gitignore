@@ -4,3 +4,6 @@
 # Dependencias npm raíz (husky, commitlint)
 node_modules/
 package-lock.json
+
+# Excepciones: sí subir el package-lock del frontend (necesario para npm ci en CI)
+!frontend/dnd-board-front/package-lock.json
