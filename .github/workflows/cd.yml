@@ -22,13 +22,73 @@ on:
         default: false
         type: boolean
 
+env:
+  DOCKERHUB_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/dnd-board-front
+
 jobs:
   # ============================================================================
-  # JOB 1: Despliegue automático en VPS
+  # JOB 1: Build + Publicación de imágenes Docker + Escaneo de seguridad
+  # ============================================================================
+  build-and-publish:
+    name: Build & Publish Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Login en Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Metadata para tags Docker
+        id: meta
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
+
+      - name: Build imagen Alpine
+        uses: docker/build-push-action@v5
+        with:
+          context: frontend/dnd-board-front
+          file: frontend/dnd-board-front/Dockerfile
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_REPO }}:alpine-${{ steps.meta.outputs.short_sha }}
+            ${{ env.DOCKERHUB_REPO }}:alpine-latest
+
+      - name: Build imagen Debian
+        uses: docker/build-push-action@v5
+        with:
+          context: frontend/dnd-board-front
+          file: frontend/dnd-board-front/Dockerfile.debian
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_REPO }}:debian-${{ steps.meta.outputs.short_sha }}
+            ${{ env.DOCKERHUB_REPO }}:debian-latest
+
+      # Escaneo de seguridad con ClamAV
+      - name: Instalar ClamAV y actualizar firmas
+        run: |
+          sudo apt-get install -y clamav --no-install-recommends
+          sudo systemctl stop clamav-freshclam || true
+          sudo freshclam
+
+      - name: Escaneo ClamAV (antivirus)
+        run: |
+          docker save ${{ env.DOCKERHUB_REPO }}:alpine-${{ steps.meta.outputs.short_sha }} -o /tmp/image.tar
+          clamscan --no-summary --infected /tmp/image.tar
+          echo "✅ Escaneo ClamAV completado"
+
+  # ============================================================================
+  # JOB 2: Despliegue automático en VPS
   # ============================================================================
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
+    needs: build-and-publish
     if: github.event.inputs.skip_deploy != 'true'
 
     steps:
