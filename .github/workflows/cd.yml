@@ -1,11 +1,11 @@
-name: CI/CD Pipeline
+name: CD - Despliegue Continuo
 
 on:
-  # 1. Ejecución automática al detectar cambios (push)
+  # Se ejecuta al hacer merge/push a main
   push:
-    branches: [main, develop]
+    branches: [main]
 
-  # 2. Ejecución manual con parámetros
+  # Ejecución manual con parámetros
   workflow_dispatch:
     inputs:
       environment:
@@ -22,173 +22,14 @@ on:
         default: false
         type: boolean
 
-  # 3. Ejecución periódica (cron) - Lunes a las 3:00 AM
-  schedule:
-    - cron: "0 3 * * 1"
-
-  # 4. Disparador adicional - Pull Requests
-  pull_request:
-    branches: [main]
-
-env:
-  DOCKERHUB_REPO: ${{ secrets.DOCKERHUB_USERNAME }}/dnd-board-front
-
 jobs:
   # ============================================================================
-  # JOB 1: Análisis de calidad del código + Tests
-  # ============================================================================
-  quality:
-    name: Lint & Tests
-    runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel_dnd_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
-    steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-
-      # ---------- FRONTEND ----------
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "npm"
-          cache-dependency-path: frontend/dnd-board-front/package-lock.json
-
-      - name: Instalar dependencias frontend
-        working-directory: frontend/dnd-board-front
-        run: npm ci
-
-      - name: Lint frontend (ESLint)
-        working-directory: frontend/dnd-board-front
-        run: npm run lint
-
-      - name: Tests frontend (Vitest)
-        working-directory: frontend/dnd-board-front
-        run: npm run test -- --coverage
-
-      # ---------- BACKEND ----------
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.3"
-          extensions: mbstring, pdo_mysql, bcmath, gd, exif, pcntl
-          coverage: xdebug
-
-      - name: Instalar dependencias backend (Composer)
-        working-directory: backend/dnd-board
-        run: composer install --prefer-dist --no-progress
-
-      - name: Lint backend (Laravel Pint)
-        working-directory: backend/dnd-board
-        run: ./vendor/bin/pint --test
-
-      - name: Preparar entorno backend
-        working-directory: backend/dnd-board
-        run: |
-          cp .env.example .env
-          php artisan key:generate
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel_dnd_test
-          DB_USERNAME: root
-          DB_PASSWORD: root
-
-      - name: Tests backend (PHPUnit)
-        working-directory: backend/dnd-board
-        run: php artisan test --coverage-text
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: 127.0.0.1
-          DB_PORT: 3306
-          DB_DATABASE: laravel_dnd_test
-          DB_USERNAME: root
-          DB_PASSWORD: root
-
-  # ============================================================================
-  # JOB 2: Build + Publicación de imágenes Docker
-  # ============================================================================
-  build-and-publish:
-    name: Build & Publish Docker Images
-    runs-on: ubuntu-latest
-    needs: quality
-    if: github.event_name != 'pull_request'
-
-    steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-
-      - name: Login en Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Metadata para tags Docker
-        id: meta
-        run: |
-          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
-          echo "short_sha=$SHORT_SHA" >> $GITHUB_OUTPUT
-          echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
-
-      - name: Build imagen Alpine
-        uses: docker/build-push-action@v5
-        with:
-          context: frontend/dnd-board-front
-          file: frontend/dnd-board-front/Dockerfile
-          push: true
-          tags: |
-            ${{ env.DOCKERHUB_REPO }}:alpine-${{ steps.meta.outputs.short_sha }}
-            ${{ env.DOCKERHUB_REPO }}:alpine-latest
-
-      - name: Build imagen Debian
-        uses: docker/build-push-action@v5
-        with:
-          context: frontend/dnd-board-front
-          file: frontend/dnd-board-front/Dockerfile.debian
-          push: true
-          tags: |
-            ${{ env.DOCKERHUB_REPO }}:debian-${{ steps.meta.outputs.short_sha }}
-            ${{ env.DOCKERHUB_REPO }}:debian-latest
-
-      # Escaneo de seguridad con ClamAV (instalado en el runner, sin daemon)
-      - name: Instalar ClamAV y actualizar firmas
-        run: |
-          sudo apt-get install -y clamav --no-install-recommends
-          sudo systemctl stop clamav-freshclam || true
-          sudo freshclam
-
-      - name: Escaneo ClamAV (antivirus)
-        run: |
-          # Exportar imagen a tar y escanear
-          docker save ${{ env.DOCKERHUB_REPO }}:alpine-${{ steps.meta.outputs.short_sha }} -o /tmp/image.tar
-          clamscan --no-summary --infected /tmp/image.tar
-          echo "✅ Escaneo ClamAV completado"
-
-  # ============================================================================
-  # JOB 3: Despliegue automático en VPS
+  # JOB 1: Despliegue automático en VPS
   # ============================================================================
   deploy:
     name: Deploy to VPS
     runs-on: ubuntu-latest
-    needs: build-and-publish
-    if: |
-      (github.ref == 'refs/heads/main') &&
-      (github.event.inputs.skip_deploy != 'true')
+    if: github.event.inputs.skip_deploy != 'true'
 
     steps:
       - name: Checkout código
@@ -224,7 +65,7 @@ jobs:
             docker image prune -f
 
   # ============================================================================
-  # JOB 4: Pruebas post-despliegue + Notificaciones
+  # JOB 2: Pruebas post-despliegue + Notificaciones
   # ============================================================================
   post-deploy:
     name: Post-Deploy Tests & Notifications
