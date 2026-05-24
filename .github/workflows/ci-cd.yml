@@ -218,14 +218,15 @@ jobs:
               git clone https://github.com/${{ github.repository }}.git .
             fi
 
-            # Pull de las nuevas imágenes
-            docker compose pull
-
-            # Recrear contenedores con la nueva imagen
-            docker compose up -d --force-recreate
-
-            # Ejecutar migraciones
-            docker compose exec -T app php artisan migrate --force
+            # Primera vez: instalar con make install-prod (crea .env, build + up)
+            # Siguientes veces: reconstruir imagen desde el nuevo código y levantar
+            if [ "$(docker compose --profile prod ps -q 2>/dev/null | wc -l)" -eq 0 ]; then
+              make install-prod
+            else
+              docker compose --profile prod build
+              make up
+              make migrate
+            fi
 
             # Limpieza de imágenes antiguas
             docker image prune -f
